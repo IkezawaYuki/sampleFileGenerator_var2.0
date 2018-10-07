@@ -1,9 +1,153 @@
+import os
+import csv
+from _datetime import datetime
+
+
+class FileInfo():
+    def __init__(self):
+        self.header = []
+        self.data1 = []
+        self.data2 = []
+        self.data3 = []
+        self.data4 = []
+        self.data5 = []
+
+
+def generate_file(basic_info_list, sort_list, join_info, file_path):
+    target_file_path = create_output_folder(file_path)
+
+    for i in range(len(sort_list)):
+        sample = FileInfo()
+        sample = header_and_data_generate(sample, sort_list[i], join_info[i])
+        delimiter = sort_list[i][0][3]
+        print(delimiter)
+        execute_write(basic_info_list[i], target_file_path, sample, delimiter)
 
 
 
-def generate_file(name_list, sort_list, join_info, target_path):
-    print(name_list)
-    print(sort_list)
-    print(join_info)
-    print(target_path)
-    pass
+def execute_write(basic_info, file_path, sample, delimiter):
+    print("from execute method")
+    print(basic_info)
+    print(file_path)
+    print(sample)
+    file_name = file_path + basic_info[0] + "_sample"
+    encode_kind = adjust_encode_kind(basic_info[1])
+    format_kind = basic_info[2]
+    delimiter = delimiter
+    header_flag = basic_info[5]
+
+    if format_kind == "可変長":
+        if not os.path.isdir(file_path):
+            os.makedirs(file_path)
+
+        with open(file_name, "w+", encoding=encode_kind, newline="") as f:
+            writer = csv.writer(f, lineterminator='\n')
+            if header_flag == 0:
+                writer.writerow(sample.header.join("＜削除必須＞"))
+            else:
+                writer.writerow(sample.header)
+            writer.writerow(sample.data1)
+            writer.writerow(sample.data2)
+            writer.writerow(sample.data3)
+            writer.writerow(sample.data4)
+            writer.writerow(sample.data5)
+    else:
+        with open(file_name, "w+", encoding=encode_kind, newline="") as f:
+            pass
+
+
+
+def adjust_encode_kind(encode_kind):
+    if encode_kind == "UTF-8":
+        return "utf-8"
+    elif encode_kind == "MS932":
+        return "cp932"
+    elif encode_kind == "EUC-JP":
+        return "EUC-JP"
+    else:
+        return "utf-8"
+
+
+def create_output_folder(file_path):
+    name, ext = os.path.splitext(file_path)
+    datedata = datetime.now().strftime("%Y%_m%d")
+    return name + "_" + datedata + "_sample/"
+
+
+def header_and_data_generate(sample, sort_list, join_info):
+    counter = 1
+    for row_info in sort_list:
+        colum_index = int(row_info[2])
+        while counter < colum_index:
+            sample.header.append("*****")
+            sample.data1.append("*****")
+            sample.data2.append("*****")
+            sample.data3.append("*****")
+            sample.data4.append("*****")
+            sample.data5.append("*****")
+            counter += 1
+
+        header_info = row_info[1]
+        sample.header.append(header_info)
+
+        date_format = row_info[4]
+        if date_format != "":
+            adjust_date_format(sample, date_format)
+            counter += 1
+            continue
+
+        if header_info == join_info[1]:
+            sample.data1.append("key_11111")
+            sample.data2.append("key_22222")
+            sample.data3.append("key_33333")
+            sample.data4.append("key_44444")
+            sample.data5.append("key_55555")
+            counter += 1
+            continue
+
+        sample.data1.append("12345")
+        sample.data2.append("12345")
+        sample.data3.append("12345")
+        sample.data4.append("12345")
+        sample.data5.append("12345")
+        counter += 1
+    return sample
+
+
+def adjust_date_format(sample, date_format):
+    if date_format == "YYYY/MM/DD":
+        day = datetime.now().strftime("%Y/%m/%d")
+        sample.data1.append(str(day))
+        sample.data2.append(str(day))
+        sample.data3.append(str(day))
+        sample.data4.append(str(day))
+        sample.data5.append(str(day))
+    elif date_format == "YYYYMMDD":
+        day = datetime.now().strftime("%Y%m%d")
+        sample.data1.append(str(day))
+        sample.data2.append(str(day))
+        sample.data3.append(str(day))
+        sample.data4.append(str(day))
+        sample.data5.append(str(day))
+    elif date_format == "YYYYMM":
+        day = datetime.now().strftime("%Y%m")
+        sample.data1.append(str(day))
+        sample.data2.append(str(day))
+        sample.data3.append(str(day))
+        sample.data4.append(str(day))
+        sample.data5.append(str(day))
+    elif date_format == "MMDD":
+        day = datetime.now().strftime("%m%d")
+        sample.data1.append(str(day))
+        sample.data2.append(str(day))
+        sample.data3.append(str(day))
+        sample.data4.append(str(day))
+        sample.data5.append(str(day))
+    elif date_format == "YYYY/MM":
+        day = datetime.now().strftime("%m/%d")
+        sample.data1.append(str(day))
+        sample.data2.append(str(day))
+        sample.data3.append(str(day))
+        sample.data4.append(str(day))
+        sample.data5.append(str(day))
+

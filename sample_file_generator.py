@@ -17,8 +17,8 @@ def main():
 
     # file = tkinter.filedialog.askopenfilename(filetypes=fTyp, initialdir=iDir)
     file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF00100051.xlsx"
-    target_path = file[:file.rfind("/")+1]
-    print(target_path)
+
+
     if file == "":
         exit(0)
 
@@ -39,9 +39,9 @@ def main():
             sort_list = read.sorted_list(infiles)
 
         if sheet.name == "基本情報":
-            name_list = read.reading_file_kihon(sheet)
+            basic_info_list = read.reading_file_kihon(sheet)
 
-    write.generate_file(name_list, sort_list, join_info, target_path)
+    write.generate_file(basic_info_list, sort_list, join_info, file)
 
 
 

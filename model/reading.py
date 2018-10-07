@@ -75,7 +75,7 @@ def sorted_list(file_list):
     files = file_list[:]
     sorted_result = []
     for temp in files:
-        sort_list = sorted(temp, key=itemgetter(4))
+        sort_list = sorted(temp, key=itemgetter(2))
         sorted_result.append(sort_list[:])
     print(sorted_result)
     return sorted_result
@@ -88,7 +88,7 @@ def reading_file_kihon(sheet):
         row_info = sheet.row(row_index)
         file_name = xstr(row_info[2].value)
         encode = xstr(row_info[5].value)
-        format = xstr(row_info[6].value)
+        format_kind = xstr(row_info[6].value)
         new_line_code = xstr(row_info[7].value)
         delimiter = xstr(row_info[8].value)
         header = xstr(row_info[13].value)
@@ -99,7 +99,7 @@ def reading_file_kihon(sheet):
                                             "一度環境にアップロードしたもののみサンプルデータを作成できます。")
                 raise IOError
             break
-        temp_file_info = (file_name, encode, format, new_line_code, delimiter, header)
+        temp_file_info = (file_name, encode, format_kind, new_line_code, delimiter, header)
         file_kihon_list.append(temp_file_info)
         row_index += 1
     return file_kihon_list
