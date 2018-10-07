@@ -27,7 +27,6 @@ def main():
             if "xlsx" not in file:
                 c = tkinter.messagebox.showerror('Sample file generator ver2.0',
                                                  '以下のファイルは変換定義書ではありません。\n' + f)
-
                 continue
             execute(f)
     else:
