@@ -40,7 +40,7 @@ def execute_write(basic_info, file_path, sample, delimiter):
         if not os.path.isdir(file_path):
             os.makedirs(file_path)
 
-        if delimiter == "":
+        if delimiter == '':
             with open(file_name, "w+", encoding=encode_kind, newline="") as f:
                 writer = csv.writer(f, lineterminator='\n')
                 if header_flag == "1.0":
@@ -56,16 +56,15 @@ def execute_write(basic_info, file_path, sample, delimiter):
                 writer.writerow(sample.data5)
         else:
             with open(file_name, "w+", encoding=encode_kind, newline="") as f:
-                writer = csv.writer(f, lineterminator='\n')
+                writer = csv.writer(f, quotechar=delimiter, lineterminator='\n', quoting=csv.QUOTE_ALL)
+                print("通過")
+                print(delimiter)
                 if header_flag == "0":
                     header_list = list(
                         map(lambda header:
-                            delimiter + header + "<削除必須>" + delimiter, sample.header))
+                            header + "<削除必須>", sample.header))
                     writer.writerow(header_list)
                 else:
-                    header_list = list(
-                        map(lambda header:
-                            delimiter + header + delimiter, sample.header))
                     writer.writerow(sample.header)
                 writer.writerow(sample.data1)
                 writer.writerow(sample.data2)
