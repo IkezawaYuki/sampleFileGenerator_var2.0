@@ -49,8 +49,8 @@ def read_join_info(index, sheet):
                                     "一度環境にアップロードしたもののみサンプルデータを作成できます。")
         raise IOError
     join_info_list = []
-    while True:
 
+    while True:
         row_info = sheet.row(row_index)
 
         file_name = xstr(row_info[2].value)

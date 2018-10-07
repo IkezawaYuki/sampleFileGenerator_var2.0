@@ -24,7 +24,6 @@ def generate_file(basic_info_list, sort_list, join_info, file_path):
         execute_write(basic_info_list[i], target_file_path, sample, delimiter)
 
 
-
 def execute_write(basic_info, file_path, sample, delimiter):
     print("from execute method")
     print(basic_info)
@@ -35,26 +34,47 @@ def execute_write(basic_info, file_path, sample, delimiter):
     format_kind = basic_info[2]
     delimiter = delimiter
     header_flag = basic_info[5]
+    print(header_flag)
 
     if format_kind == "可変長":
         if not os.path.isdir(file_path):
             os.makedirs(file_path)
 
-        with open(file_name, "w+", encoding=encode_kind, newline="") as f:
-            writer = csv.writer(f, lineterminator='\n')
-            if header_flag == 0:
-                writer.writerow(sample.header.join("＜削除必須＞"))
-            else:
-                writer.writerow(sample.header)
-            writer.writerow(sample.data1)
-            writer.writerow(sample.data2)
-            writer.writerow(sample.data3)
-            writer.writerow(sample.data4)
-            writer.writerow(sample.data5)
+        if delimiter == "":
+            with open(file_name, "w+", encoding=encode_kind, newline="") as f:
+                writer = csv.writer(f, lineterminator='\n')
+                if header_flag == "1.0":
+                    header_list = list(
+                        map(lambda header:header + "<削除必須>", sample.header))
+                    writer.writerow(header_list)
+                else:
+                    writer.writerow(sample.header)
+                writer.writerow(sample.data1)
+                writer.writerow(sample.data2)
+                writer.writerow(sample.data3)
+                writer.writerow(sample.data4)
+                writer.writerow(sample.data5)
+        else:
+            with open(file_name, "w+", encoding=encode_kind, newline="") as f:
+                writer = csv.writer(f, lineterminator='\n')
+                if header_flag == "0":
+                    header_list = list(
+                        map(lambda header:
+                            delimiter + header + "<削除必須>" + delimiter, sample.header))
+                    writer.writerow(header_list)
+                else:
+                    header_list = list(
+                        map(lambda header:
+                            delimiter + header + delimiter, sample.header))
+                    writer.writerow(sample.header)
+                writer.writerow(sample.data1)
+                writer.writerow(sample.data2)
+                writer.writerow(sample.data3)
+                writer.writerow(sample.data4)
+                writer.writerow(sample.data5)
     else:
         with open(file_name, "w+", encoding=encode_kind, newline="") as f:
             pass
-
 
 
 def adjust_encode_kind(encode_kind):
@@ -96,7 +116,7 @@ def header_and_data_generate(sample, sort_list, join_info):
             counter += 1
             continue
 
-        if header_info == join_info[1]:
+        if header_info in join_info[1]:
             sample.data1.append("key_11111")
             sample.data2.append("key_22222")
             sample.data3.append("key_33333")

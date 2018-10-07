@@ -9,15 +9,14 @@ import model.reading as read
 import model.writing as write
 
 
+
 def main():
     root = tkinter.Tk()
     root.withdraw()
     fTyp = [("", "*")]
     iDir = os.path.abspath(os.path.dirname(__file__))
-
-    # file = tkinter.filedialog.askopenfilename(filetypes=fTyp, initialdir=iDir)
+    # file = tkinter.filedialog.askopenfilename(filetypes=fTyp, initialdir=download_path)
     file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF00100051.xlsx"
-
 
     if file == "":
         exit(0)
@@ -28,6 +27,9 @@ def main():
         exit(0)
 
     wb = xlrd.open_workbook(file)
+    basic_info_list = []
+    join_info = []
+    sort_list = []
 
     for page in range(wb.nsheets):
         sheet = wb.sheet_by_index(page)
@@ -35,15 +37,13 @@ def main():
             continue
 
         if sheet.name == "項目情報":
-            infiles, join_info = read.reading_file_koumoku(sheet)
-            sort_list = read.sorted_list(infiles)
+            in_files, join_info = read.reading_file_koumoku(sheet)
+            sort_list = read.sorted_list(in_files)
 
         if sheet.name == "基本情報":
             basic_info_list = read.reading_file_kihon(sheet)
 
     write.generate_file(basic_info_list, sort_list, join_info, file)
-
-
 
     exit(0)
 
