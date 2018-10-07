@@ -9,23 +9,38 @@ import model.reading as read
 import model.writing as write
 
 
-
 def main():
     root = tkinter.Tk()
     root.withdraw()
-    fTyp = [("", "*")]
+    fTyp = [("", ".xlsx")]
     iDir = os.path.abspath(os.path.dirname(__file__))
-    # file = tkinter.filedialog.askopenfilename(filetypes=fTyp, initialdir=download_path)
+    # file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
     file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF00100051.xlsx"
+    #file = ("/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF00100051.xlsx",
+    # "/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF21000099.xlsx")
 
     if file == "":
         exit(0)
 
-    if "xlsx" not in file:
-        c = tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                         '変換定義書ではありません。')
-        exit(0)
+    if type(file) is tuple:
+        for f in file:
+            if "xlsx" not in file:
+                c = tkinter.messagebox.showerror('Sample file generator ver2.0',
+                                                 '以下のファイルは変換定義書ではありません。\n' + f)
 
+                continue
+            execute(f)
+    else:
+        if "xlsx" not in file:
+             c = tkinter.messagebox.showerror('Sample file generator ver2.0',
+                                              '変換定義書ではありません。')
+             exit(0)
+        execute(file)
+
+    exit(0)
+
+
+def execute(file):
     wb = xlrd.open_workbook(file)
     basic_info_list = []
     join_info = []
@@ -44,8 +59,6 @@ def main():
             basic_info_list = read.reading_file_kihon(sheet)
 
     write.generate_file(basic_info_list, sort_list, join_info, file)
-
-    exit(0)
 
 
 if __name__ == "__main__":

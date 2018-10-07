@@ -55,7 +55,7 @@ def execute_write(basic_info, file_path, sample, delimiter):
                 writer.writerow(sample.data4)
                 writer.writerow(sample.data5)
         else:
-            with open(file_name, "w+", encoding=encode_kind, newline="") as f:
+            with open(file_name, "w+", encoding=encode_kind, newline="", errors="replace") as f:
                 writer = csv.writer(f, quotechar=delimiter, lineterminator='\n', quoting=csv.QUOTE_ALL)
                 print("通過")
                 print(delimiter)
@@ -80,7 +80,7 @@ def adjust_encode_kind(encode_kind):
     if encode_kind == "UTF-8":
         return "utf-8"
     elif encode_kind == "MS932":
-        return "cp932"
+        return "shift_jis"
     elif encode_kind == "EUC-JP":
         return "EUC-JP"
     else:
