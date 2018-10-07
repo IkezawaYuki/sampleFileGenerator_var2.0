@@ -50,12 +50,12 @@ def execute(file):
         if sheet.name != "項目情報" and sheet.name != "基本情報":
             continue
 
+        if sheet.name == "基本情報":
+            basic_info_list = read.reading_file_kihon(sheet)
+
         if sheet.name == "項目情報":
             in_files, join_info = read.reading_file_koumoku(sheet)
             sort_list = read.sorted_list(in_files)
-
-        if sheet.name == "基本情報":
-            basic_info_list = read.reading_file_kihon(sheet)
 
     write.generate_file(basic_info_list, sort_list, join_info, file)
 

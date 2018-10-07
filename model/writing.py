@@ -1,5 +1,6 @@
 import os
 import csv
+import tkinter.messagebox
 from _datetime import datetime
 
 
@@ -43,9 +44,9 @@ def execute_write(basic_info, file_path, sample, delimiter):
         if delimiter == '':
             with open(file_name, "w+", encoding=encode_kind, newline="") as f:
                 writer = csv.writer(f, lineterminator='\n')
-                if header_flag == "1.0":
+                if header_flag == "0":
                     header_list = list(
-                        map(lambda header:header + "<削除必須>", sample.header))
+                        map(lambda header: header + "<削除必須>", sample.header))
                     writer.writerow(header_list)
                 else:
                     writer.writerow(sample.header)
@@ -57,12 +58,10 @@ def execute_write(basic_info, file_path, sample, delimiter):
         else:
             with open(file_name, "w+", encoding=encode_kind, newline="", errors="replace") as f:
                 writer = csv.writer(f, quotechar=delimiter, lineterminator='\n', quoting=csv.QUOTE_ALL)
-                print("通過")
-                print(delimiter)
+
                 if header_flag == "0":
                     header_list = list(
-                        map(lambda header:
-                            header + "<削除必須>", sample.header))
+                        map(lambda header: header + "<削除必須>", sample.header))
                     writer.writerow(header_list)
                 else:
                     writer.writerow(sample.header)
@@ -72,8 +71,10 @@ def execute_write(basic_info, file_path, sample, delimiter):
                 writer.writerow(sample.data4)
                 writer.writerow(sample.data5)
     else:
-        with open(file_name, "w+", encoding=encode_kind, newline="") as f:
-            pass
+        tkinter.messagebox.showerror('Sample file generator ver2.0',
+                                     "var2.0では固定長ファイルに対応しておりません。")
+        raise IOError
+        # with open(file_name, "w+", encoding=encode_kind, newline="") as f:
 
 
 def adjust_encode_kind(encode_kind):
@@ -89,8 +90,8 @@ def adjust_encode_kind(encode_kind):
 
 def create_output_folder(file_path):
     name, ext = os.path.splitext(file_path)
-    datedata = datetime.now().strftime("%Y%_m%d")
-    return name + "_" + datedata + "_sample/"
+    date_data = datetime.now().strftime("%Y%_m%d")
+    return name + "_" + date_data + "_sample/"
 
 
 def header_and_data_generate(sample, sort_list, join_info):

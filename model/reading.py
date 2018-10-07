@@ -1,6 +1,7 @@
 import tkinter.messagebox
 from operator import itemgetter
 
+
 def xstr(s):
     return "" if s is None else str(s)
 
@@ -20,7 +21,7 @@ def reading_file_koumoku(sheet):
 
         if file_name == "" and item == "" and column_index == "":
             if file_name == "" and row_index == 6:
-                tkinter.messagebox.showinfo('Sample file generator ver2.0',
+                tkinter.messagebox.showerror('Sample file generator ver2.0',
                                             "一度環境にアップロードしたもののみサンプルデータを作成できます。")
                 raise IOError
             files_list.append(file_info[:])
