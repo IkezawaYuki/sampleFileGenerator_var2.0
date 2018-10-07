@@ -16,7 +16,7 @@ def main():
     iDir = os.path.abspath(os.path.dirname(__file__))
 
     # file = tkinter.filedialog.askopenfilename(filetypes=fTyp, initialdir=iDir)
-    file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF21000099.xlsx"
+    file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF00100051.xlsx"
     target_path = file[:file.rfind("/")+1]
     print(target_path)
     if file == "":
