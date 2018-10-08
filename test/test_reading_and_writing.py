@@ -38,7 +38,27 @@ class TestCase(object):
                     "/Users/ikezaway/Downloads/test_data/IF52700064.xlsx",
                     "/Users/ikezaway/Downloads/test_data/IF52700065.xlsx",
                     "/Users/ikezaway/Downloads/test_data/IF52700066.xlsx",
-                    "/Users/ikezaway/Downloads/test_data/IF52700098.xlsx"
+                    "/Users/ikezaway/Downloads/test_data/IF52700098.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF21000051.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF21000052.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF21000053.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF21000054.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF21000055.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF21000056.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF21000057.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF21000058.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF21000059.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF21000099.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF03200052.xls",
+                    "/Users/ikezaway/Downloads/test_data/IF03200053.xls",
+                    "/Users/ikezaway/Downloads/test_data/IF03200054.xls",
+                    "/Users/ikezaway/Downloads/test_data/IF03200055.xls",
+                    "/Users/ikezaway/Downloads/test_data/IF03200056.xls",
+                    "/Users/ikezaway/Downloads/test_data/IF03200099.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF00120052.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF00120054.xlsx",
+                    "/Users/ikezaway/Downloads/test_data/IF00120055.xlsx"
+
                  )
         for f in file:
-            assert sample_file_generator.execute(f) == True
+            assert sample_file_generator.execute(f) is True

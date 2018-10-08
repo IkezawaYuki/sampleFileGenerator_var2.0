@@ -32,7 +32,7 @@ def execute_write(basic_info, file_path, sample, delimiter):
     print(basic_info)
     print(file_path)
     print(sample)
-    file_name = file_path + basic_info[0] + "_sample"
+    file_name = file_path + basic_info[0] + "_sample.csv"
     encode_kind = adjust_encode_kind(basic_info[1])
     format_kind = basic_info[2]
     delimiter = delimiter

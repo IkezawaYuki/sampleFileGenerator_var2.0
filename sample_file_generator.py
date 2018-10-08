@@ -15,9 +15,12 @@ def main():
     fTyp = [("", ".xlsx")]
     iDir = os.path.abspath(os.path.dirname(__file__))
     # file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
-    file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF21000099.xlsx"
-    #file = ("/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF00100051.xlsx",
-    # "/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF21000099.xlsx")
+    # file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/basic_join.xlsx"
+    file = (
+        "/Users/ikezaway/Downloads/test_data/IF01200052.xlsx",
+        "/Users/ikezaway/Downloads/test_data/IF01200054.xlsx",
+        "/Users/ikezaway/Downloads/test_data/IF01200055.xlsx"
+     )
 
     if file == "":
         exit(0)
@@ -60,6 +63,7 @@ def execute(file):
 
     write.generate_file(basic_info_list, sort_list, join_info, file)
     return True
+
 
 if __name__ == "__main__":
     main()
