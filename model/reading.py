@@ -10,7 +10,20 @@ def reading_file_koumoku(sheet):
     files_list = []   #ファイル全ての情報のリスト
     file_info = []    #inファイル単位の情報
 
-    row_index = 6
+    row_index = 0
+
+    while True:
+        row_info = sheet.row(row_index)
+        info_column = xstr(row_info[1].value)
+        if "入力元テキストファイル" in info_column or "入力元ファイル" in info_column:
+            row_index += 2
+            break
+        row_index += 1
+        if row_index > 100:
+            tkinter.messagebox.showerror('Sample file generator ver2.0',
+                                         "一度環境にアップロードしたもののみサンプルデータを作成できます。")
+            raise IOError
+
     while True:
         row_info = sheet.row(row_index)
         file_name = xstr(row_info[2].value)
@@ -20,14 +33,10 @@ def reading_file_koumoku(sheet):
         date_format = xstr(row_info[6].value)
 
         if file_name == "" and item == "" and column_index == "":
-            if file_name == "" and row_index == 6:
-                tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                            "一度環境にアップロードしたもののみサンプルデータを作成できます。")
-                raise IOError
             files_list.append(file_info[:])
             break
 
-        if file_name != "" and row_index != 6:
+        if file_name != "" and len(file_info) > 0:
             files_list.append(file_info[:])
             file_info.clear()
 
@@ -46,9 +55,7 @@ def read_join_info(index, sheet):
     if "入力" in xstr(row_info[2].value):
         row_index += 1
     else:
-        tkinter.messagebox.showinfo('Sample file generator ver2.0',
-                                    "一度環境にアップロードしたもののみサンプルデータを作成できます。")
-        raise IOError
+        return None
     join_info_list = []
 
     while True:
@@ -83,8 +90,21 @@ def sorted_list(file_list):
 
 
 def reading_file_kihon(sheet):
-    row_index = 26
+    row_index = 1
     file_kihon_list = []
+
+    while True:
+        row_info = sheet.row(row_index)
+        info_column = xstr(row_info[1].value)
+        if "入力元ファイル" in info_column or "入力元テキストファイル" in info_column:
+            row_index += 2
+            break
+        row_index += 1
+        if row_index > 100:
+            tkinter.messagebox.showerror('Sample file generator ver2.0',
+                                         "一度環境にアップロードしたもののみサンプルデータを作成できます。")
+            raise IOError
+
     while True:
         row_info = sheet.row(row_index)
         file_name = xstr(row_info[2].value)

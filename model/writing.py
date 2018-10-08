@@ -19,9 +19,11 @@ def generate_file(basic_info_list, sort_list, join_info, file_path):
 
     for i in range(len(sort_list)):
         sample = FileInfo()
-        sample = header_and_data_generate(sample, sort_list[i], join_info[i])
+        if join_info is not None:
+            sample = header_and_data_generate(sample, sort_list[i], join_info[i])
+        else:
+            sample = header_and_data_generate(sample, sort_list[i], None)
         delimiter = sort_list[i][0][3]
-        print(delimiter)
         execute_write(basic_info_list[i], target_file_path, sample, delimiter)
 
 
@@ -116,14 +118,15 @@ def header_and_data_generate(sample, sort_list, join_info):
             counter += 1
             continue
 
-        if header_info in join_info[1]:
-            sample.data1.append("key_11111")
-            sample.data2.append("key_22222")
-            sample.data3.append("key_33333")
-            sample.data4.append("key_44444")
-            sample.data5.append("key_55555")
-            counter += 1
-            continue
+        if join_info is not None:
+            if header_info in join_info[1]:
+                sample.data1.append("key_11111")
+                sample.data2.append("key_22222")
+                sample.data3.append("key_33333")
+                sample.data4.append("key_44444")
+                sample.data5.append("key_55555")
+                counter += 1
+                continue
 
         sample.data1.append("12345")
         sample.data2.append("12345")

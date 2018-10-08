@@ -15,7 +15,7 @@ def main():
     fTyp = [("", ".xlsx")]
     iDir = os.path.abspath(os.path.dirname(__file__))
     # file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
-    file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF00100051.xlsx"
+    file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF21000099.xlsx"
     #file = ("/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF00100051.xlsx",
     # "/Users/ikezaway/PycharmProjects/sampleFileGenerator/IF21000099.xlsx")
 
@@ -24,13 +24,14 @@ def main():
 
     if type(file) is tuple:
         for f in file:
-            if "xlsx" not in file:
+            if "xls" not in f:
                 c = tkinter.messagebox.showerror('Sample file generator ver2.0',
                                                  '以下のファイルは変換定義書ではありません。\n' + f)
                 continue
+            print(f + " is executing...")
             execute(f)
     else:
-        if "xlsx" not in file:
+        if "xls" not in file:
              c = tkinter.messagebox.showerror('Sample file generator ver2.0',
                                               '変換定義書ではありません。')
              exit(0)
@@ -58,7 +59,7 @@ def execute(file):
             sort_list = read.sorted_list(in_files)
 
     write.generate_file(basic_info_list, sort_list, join_info, file)
-
+    return True
 
 if __name__ == "__main__":
     main()
