@@ -14,13 +14,9 @@ def main():
     root.withdraw()
     fTyp = [("", ".xlsx")]
     iDir = os.path.abspath(os.path.dirname(__file__))
-    # file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
+    file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
     # file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/basic_join.xlsx"
-    file = (
-        "/Users/ikezaway/Downloads/test_data/IF01200052.xlsx",
-        "/Users/ikezaway/Downloads/test_data/IF01200054.xlsx",
-        "/Users/ikezaway/Downloads/test_data/IF01200055.xlsx"
-     )
+
 
     if file == "":
         exit(0)
@@ -40,6 +36,9 @@ def main():
              exit(0)
         execute(file)
 
+
+    tkinter.messagebox.showinfo('Sample file generator ver2.0',
+                                              '処理が正常終了しました。')
     exit(0)
 
 

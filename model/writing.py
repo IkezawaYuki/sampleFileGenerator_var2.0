@@ -28,10 +28,6 @@ def generate_file(basic_info_list, sort_list, join_info, file_path):
 
 
 def execute_write(basic_info, file_path, sample, delimiter):
-    print("from execute method")
-    print(basic_info)
-    print(file_path)
-    print(sample)
     file_name = file_path + basic_info[0] + "_sample.csv"
     encode_kind = adjust_encode_kind(basic_info[1])
     format_kind = basic_info[2]
@@ -92,7 +88,7 @@ def adjust_encode_kind(encode_kind):
 
 def create_output_folder(file_path):
     name, ext = os.path.splitext(file_path)
-    date_data = datetime.now().strftime("%Y%_m%d")
+    date_data = datetime.now().strftime("%Y_%m%d")
     return name + "_" + date_data + "_sample/"
 
 
