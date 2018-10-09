@@ -56,5 +56,3 @@ README  <sample_file_generator.exe>
 
 
 
-other
-バグなどのご連絡はSlackにて池澤（ikezaw_y）までご連絡ください。
