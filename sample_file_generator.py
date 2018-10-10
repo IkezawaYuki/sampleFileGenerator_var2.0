@@ -61,10 +61,10 @@ def execute(file):
             in_files, join_info = read.reading_file_koumoku(sheet)
             sort_list = read.sorted_list(in_files)
 
-        if sheet.name == "変換詳細情報":
-            if check.execute_coverage_test(sheet) is False:
-                c = tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                                 '変換詳細情報を確認してください。')
+        # if sheet.name == "変換詳細情報":
+        #     if check.execute_coverage_test(sheet) is False:
+        #         c = tkinter.messagebox.showerror('Sample file generator ver2.0',
+        #                                          '変換詳細情報を確認してください。')
 
 
     write.generate_file(basic_info_list, sort_list, join_info, file)
