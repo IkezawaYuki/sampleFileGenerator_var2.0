@@ -15,8 +15,9 @@ def main():
     root.withdraw()
     fTyp = [("", "*")]
     iDir = os.path.abspath(os.path.dirname(__file__))
-    file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
+    # file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
     # file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/basic_join.xlsx"
+    file = "/Users/ikezaway/Downloads/test_data/IF52700099.xlsx"
 
 
     if file == "":
@@ -51,8 +52,6 @@ def execute(file):
 
     for page in range(wb.nsheets):
         sheet = wb.sheet_by_index(page)
-        if sheet.name != "項目情報" and sheet.name != "基本情報":
-            continue
 
         if sheet.name == "基本情報":
             basic_info_list = read.reading_file_kihon(sheet)
@@ -61,11 +60,10 @@ def execute(file):
             in_files, join_info = read.reading_file_koumoku(sheet)
             sort_list = read.sorted_list(in_files)
 
-        # if sheet.name == "変換詳細情報":
-        #     if check.execute_coverage_test(sheet) is False:
-        #         c = tkinter.messagebox.showerror('Sample file generator ver2.0',
-        #                                          '変換詳細情報を確認してください。')
-
+        if sheet.name == "変換詳細情報":
+            if check.execute_coverage_test(sheet) is False:
+                c = tkinter.messagebox.showerror('Sample file generator ver2.0',
+                                                 '変換詳細情報を確認してください。')
 
     write.generate_file(basic_info_list, sort_list, join_info, file)
     return True
