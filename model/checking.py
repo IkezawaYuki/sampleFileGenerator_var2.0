@@ -70,6 +70,7 @@ def read(sheet):
             if key in temp_rows:
                 converte_rows.append(temp_rows)
 
+            details.append(False)
             temp_rows[key] = details
 
             row_index += 1
@@ -86,7 +87,7 @@ def inspect_main(key, group):
         temp = group[key]
         for num, cell in enumerate(temp):
             if num == 0:
-                temp[0] = True
+                temp[10] = True
             elif ">>" in cell:
                 togo = cell[-2:-1]
                 togo = int(togo + "00")
