@@ -42,7 +42,7 @@ def execute_write(basic_info, file_path, sample, delimiter):
         if delimiter == '':
             with open(file_name, "w+", encoding=encode_kind, newline="") as f:
                 writer = csv.writer(f, lineterminator='\n')
-                if header_flag == "0":
+                if header_flag == "0" or header_flag == 0:
                     header_list = list(
                         map(lambda header: header + "<削除必須>", sample.header))
                     writer.writerow(header_list)
@@ -55,9 +55,9 @@ def execute_write(basic_info, file_path, sample, delimiter):
                 writer.writerow(sample.data5)
         else:
             with open(file_name, "w+", encoding=encode_kind, newline="", errors="replace") as f:
-                writer = csv.writer(f, quotechar=delimiter, lineterminator='\n', quoting=csv.QUOTE_ALL)
+                writer = csv.writer(f, quotechar='"', lineterminator='\n', quoting=csv.QUOTE_ALL)
 
-                if header_flag == "0":
+                if header_flag == "0" or header_flag == 0:
                     header_list = list(
                         map(lambda header: header + "<削除必須>", sample.header))
                     writer.writerow(header_list)

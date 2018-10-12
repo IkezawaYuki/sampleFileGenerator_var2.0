@@ -15,9 +15,9 @@ def main():
     root.withdraw()
     fTyp = [("", "*")]
     iDir = os.path.abspath(os.path.dirname(__file__))
-    # file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
+    file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
     # file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/basic_join.xlsx"
-    file = "/Users/ikezaway/Downloads/test_data/IF52700099.xlsx"
+    # file = "/Users/ikezaway/Downloads/test_data/IF52700099.xlsx"
 
 
     if file == "":
@@ -64,7 +64,6 @@ def execute(file):
             if check.execute_coverage_test(sheet) is False:
                 c = tkinter.messagebox.showerror('Sample file generator ver2.0',
                                                  '変換詳細情報を確認してください。')
-
     write.generate_file(basic_info_list, sort_list, join_info, file)
     return True
 
