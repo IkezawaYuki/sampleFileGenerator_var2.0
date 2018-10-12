@@ -113,12 +113,12 @@ def execute_coverage_test(sheet):
     """　変換定義の詳細情報がすべて通る可能性があるかどうか """
     converte_rows = read(sheet)
 
-    henkan = []
-
-    for group in henkan:
+    for group in converte_rows:
         inspect_main(101, group)
 
-    for group in henkan:
+    print(converte_rows)
+
+    for group in converte_rows:
         if group[0] is False:
             raise ValueError
 
