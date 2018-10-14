@@ -7,11 +7,17 @@ def xstr(s):
 
 
 def reading_file_koumoku(sheet):
+    """
+    項目情報を読み取る。ここで読み込んだ情報がサンプルファイルのヘッダーやデータの型などに直接影響する。
+    :param sheet:　変換定義書の「項目情報」のシート
+    :return:
+    """
     files_list = []   #ファイル全ての情報のリスト
     file_info = []    #inファイル単位の情報
 
     row_index = 0
 
+    # 入力元テキストファイル項目情報がどこから始まるのかを確認
     while True:
         row_info = sheet.row(row_index)
         info_column = xstr(row_info[1].value)
@@ -24,6 +30,8 @@ def reading_file_koumoku(sheet):
                                          "一度環境にアップロードしたもののみサンプルデータを作成できます。")
             raise IOError
 
+    # ここで項目情報を１行１行取得している。
+    # １行１行がタプル、それらが入力元名称で配列に分けられている、それらは全体で一つの配列にはいっている。
     while True:
         row_info = sheet.row(row_index)
         file_name = xstr(row_info[2].value)
@@ -50,6 +58,12 @@ def reading_file_koumoku(sheet):
 
 
 def read_join_info(index, sheet):
+    """
+    結合に使われているカラムの情報を取得するメソッド
+    :param index: 入力元のファイル項目情報を読み込んだあとの行数
+    :param sheet: 変換定義書の項目情報のシート
+    :return:　結合情報のリスト
+    """
     row_index = index + 3
     row_info = sheet.row(row_index)
     if "入力" in xstr(row_info[2].value):
@@ -80,6 +94,11 @@ def read_join_info(index, sheet):
 
 
 def sorted_list(file_list):
+    """
+    項目情報から読み込んだ入力元ファイルの項目情報をカラム順にソートするメソッド
+    :param file_list: 入力元テキスト項目情報、１行１行の情報
+    :return: カラム位置順にソートされたもの。
+    """
     files = file_list[:]
     sorted_result = []
     for temp in files:
@@ -90,6 +109,11 @@ def sorted_list(file_list):
 
 
 def reading_file_kihon(sheet):
+    """
+
+    :param sheet: 変換定義書の基本情報
+    :return:
+    """
     row_index = 1
     file_kihon_list = []
 

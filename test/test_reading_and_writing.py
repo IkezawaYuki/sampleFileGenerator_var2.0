@@ -2,6 +2,7 @@ import model.reading as read
 import model.writing as write
 import sample_file_generator
 
+
 class TestCase(object):
     def test_xstrs(self):
         info = None

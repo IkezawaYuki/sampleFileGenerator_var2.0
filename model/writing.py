@@ -4,7 +4,10 @@ import tkinter.messagebox
 from _datetime import datetime
 
 
-class FileInfo():
+class FileInfo:
+    """
+    サンプルファイルのオブジェクト
+    """
     def __init__(self):
         self.header = []
         self.data1 = []
@@ -28,6 +31,14 @@ def generate_file(basic_info_list, sort_list, join_info, file_path):
 
 
 def execute_write(basic_info, file_path, sample, delimiter):
+    """
+    ファイルの出力が行われるメソッド。
+    :param basic_info: 基本情報
+    :param file_path: 出力先のパス
+    :param sample: サンプルファイル
+    :param delimiter: くくり文字
+    :return:
+    """
     file_name = file_path + basic_info[0] + "_sample.csv"
     encode_kind = adjust_encode_kind(basic_info[1])
     format_kind = basic_info[2]
@@ -93,6 +104,13 @@ def create_output_folder(file_path):
 
 
 def header_and_data_generate(sample, sort_list, join_info):
+    """
+    出力するサンプルファイルの内容を決定するメソッド
+    :param sample: 出力するファイルごとのオブジェクト
+    :param sort_list: 項目情報
+    :param join_info: 結合情報
+    :return: 情報を書き込んだ後のファイルオブジェクト
+    """
     counter = 1
     for row_info in sort_list:
         colum_index = int(row_info[2])

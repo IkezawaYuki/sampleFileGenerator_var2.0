@@ -15,9 +15,9 @@ def main():
     root.withdraw()
     fTyp = [("", "*")]
     iDir = os.path.abspath(os.path.dirname(__file__))
-    file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
+    # file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
     # file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/basic_join.xlsx"
-    # file = "/Users/ikezaway/Downloads/test_data/IF52700099.xlsx"
+    file = "/Users/ikezaway/Downloads/test_data/IF52700099.xlsx"
 
 
     if file == "":

@@ -6,18 +6,13 @@ def xstr(s):
     return "" if s is None else str(s)
 
 
-class Rows:
-    def __init__(self, num, one, two, three, four, five, six):
-        self.number = num
-        self.one = one
-        self.two = two
-        self.three = three
-        self.four = four
-        self.five = five
-        self.six = six
-
-
 def create_key(lane, order):
+    """
+    レーン、順序から作った３桁のキーを作る
+    :param lane: 変換詳細の「レーン」の数字
+    :param order: 変換詳細の「順序」の数字
+    :return:　３桁のint型のkey
+    """
     lane = math.floor(lane)
     order = math.floor(order)
     key = str(lane) + "0" + str(order)
@@ -25,9 +20,14 @@ def create_key(lane, order):
     return key
 
 
-def read(sheet):
+def read_convert_info(sheet):
+    """
+    :param sheet: 変換定義の「変換詳細情報」のシート
+
+    """
     row_index = 1
 
+    # 変換詳細がどこから始まるのかを探す
     while True:
         row_info = sheet.row(row_index)
         info_column = xstr(row_info[1].value)
@@ -42,6 +42,8 @@ def read(sheet):
 
     converte_rows = []
     temp_rows = {}
+
+    # 変換詳細を読み込む際に、変換名称ごとにレーン、順序をキーに辞書にし、全体をconverte_rowsに入れている。
     while True:
         try:
             row_info = sheet.row(row_index)
@@ -53,66 +55,92 @@ def read(sheet):
                        xstr(row_info[11].value), xstr(row_info[12].value), xstr(row_info[13].value),
                        xstr(row_info[14].value)]
 
-
-
+            # 読み込む行がなくなった時
             if henkan_name == "" and lane == "" and order == "":
                 break
 
-            print(lane)
-            print(order)
-            print(type(lane))
+            if henkan_name != "" and len(temp_rows) != 0:
+                converte_rows.append(temp_rows)
+                temp_rows = {}
+
             key = create_key(lane, order)
-
-            if len(converte_rows) != 0 and lane == "1":
-                converte_rows.append(temp_rows)
-
-            # konomamadeha
-            if key in temp_rows:
-                converte_rows.append(temp_rows)
 
             details.append(False)
             temp_rows[key] = details
 
             row_index += 1
+        # 読み込む行数がなくなった場合、その境界値でエラーが頻発するため、exeptで対処している。
         except IndexError:
             converte_rows.append(temp_rows)
             break
     print(converte_rows)
+    for i in converte_rows:
+        print(i)
+    print("--上がデータ構造--")
     return converte_rows
 
 
 def inspect_main(key, group):
+    """
+    変換詳細情報のチェックのメインルーチン。各行に対して、通った行にはTrue、通らなかった行はFalseとなる。
+    :param key: レーン、順序から作った３桁のキー
+    :param group: 変換詳細の情報を、変換名称ごとに分けたもの。
+    :return:
+    """
 
     try:
         temp = group[key]
+        print(temp)
         for num, cell in enumerate(temp):
-            if num == 0:
-                temp[10] = True
+            if num == 10:
+                togo = key + 1
+                if togo in group:
+                    print("let's go")
+                    inspect_main(togo, group)
+                else:
+                    print("break")
+                break
+            elif num == 0:
+                if temp[10] is False:
+                    temp[10] = True
+                else:
+                    return
             elif ">>" in cell:
-                togo = cell[-2:-1]
-                togo = int(togo + "00")
-                key += togo
+                key = adjust_togo(cell)
                 inspect_main(key, group)
             elif ">" in cell:
-                togo = cell[2] + "0" + cell[4]
-                togo = int(togo)
-                inspect_main(togo, group)
+                key = adjust_togo(cell)
+                inspect_main(key, group)
     except ValueError:
         return
 
 
-
-def inspection(convete_rows):
-
-    pass
-    #　辞書型にして再帰呼び出しするメソッドに渡す
-
-
+def adjust_togo(cell):
+    """
+    >1-1 や >>2などの値をkeyの形（101などの３桁）に修正するメソッド
+    :param cell: 「>」「>>」が存在するセル
+    :return: ３桁の数、key
+    """
+    if ">>" in cell:
+        n = cell.rfind(">")
+        togo = cell[n + 1:]
+        togo = int(togo + "01")
+        return togo
+    elif ">" in cell:
+        print(cell)
+        n = cell.rfind(">")
+        togo = cell[n + 1:]
+        togo = int(togo.replace("-", "0"))
+        return togo
 
 
 def execute_coverage_test(sheet):
-    """　変換定義の詳細情報がすべて通る可能性があるかどうか """
-    converte_rows = read(sheet)
+    """
+    変換定義の詳細情報がすべて通る可能性があるかどうかのチェックを行うメソッド
+    :param sheet: 変換定義書の「変換詳細情報」のシート
+    :return: 通らない行が存在する場合、この時点でエラーメッセージ出力
+    """
+    converte_rows = read_convert_info(sheet)
 
     for group in converte_rows:
         inspect_main(101, group)
@@ -120,6 +148,11 @@ def execute_coverage_test(sheet):
     print(converte_rows)
 
     for group in converte_rows:
-        if group[0] is False:
-            raise ValueError
+        results = group.values()
+        for result in results:
+            if result[10] is False:
+                return False
+            else:
+                print("True good job")
+    return True
 
