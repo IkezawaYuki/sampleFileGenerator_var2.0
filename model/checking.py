@@ -97,8 +97,6 @@ def inspect_main(key, group):
                 if togo in group:
                     print("let's go")
                     inspect_main(togo, group)
-                else:
-                    print("break")
                 break
             elif num == 0:
                 if temp[10] is False:

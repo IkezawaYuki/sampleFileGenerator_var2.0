@@ -4,6 +4,7 @@ import xlrd
 import os
 import tkinter.filedialog
 import tkinter.messagebox
+import logging
 
 import model.reading as read
 import model.writing as write
@@ -18,7 +19,6 @@ def main():
     # file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
     # file = "/Users/ikezaway/PycharmProjects/sampleFileGenerator/basic_join.xlsx"
     file = "/Users/ikezaway/Downloads/test_data/IF52700099.xlsx"
-
 
     if file == "":
         exit(0)
@@ -38,9 +38,8 @@ def main():
              exit(0)
         execute(file)
 
-
     tkinter.messagebox.showinfo('Sample file generator ver2.0',
-                                              '処理が正常終了しました。')
+                                '処理が正常終了しました。')
     exit(0)
 
 
