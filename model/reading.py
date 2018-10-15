@@ -12,9 +12,6 @@ def reading_file_koumoku(sheet):
     :param sheet:　変換定義書の「項目情報」のシート
     :return:
     """
-    files_list = []   #ファイル全ての情報のリスト
-    file_info = []    #inファイル単位の情報
-
     row_index = 0
 
     # 入力元テキストファイル項目情報がどこから始まるのかを確認
@@ -29,6 +26,62 @@ def reading_file_koumoku(sheet):
             tkinter.messagebox.showerror('Sample file generator ver2.0',
                                          "一度環境にアップロードしたもののみサンプルデータを作成できます。")
             raise IOError
+
+    if "可変" in info_column:
+        print("可変長")
+        files_list, row_index = read_koumku_ver_kahen(row_index, sheet)
+    else:
+        print("固定長")
+        files_list, row_index = read_koumoku_ver_kotei(row_index, sheet)
+    join_info = read_join_info(row_index, sheet)
+    return files_list, join_info
+
+
+def read_koumoku_ver_kotei(index, sheet):
+    """
+    固定長ファイルの情報を読み込むメソッド
+
+    """
+    files_list = []  # ファイル全ての情報のリスト
+    file_info = []  # inファイル単位の情報
+    row_index = index
+
+    # ここで項目情報を１行１行取得している。
+    # １行１行がタプル、それらが入力元名称で配列に分けられている、それらは全体で一つの配列にはいっている。
+    while True:
+        row_info = sheet.row(row_index)
+        file_name = xstr(row_info[2].value)
+        item = xstr(row_info[3].value)
+        start_byte = row_info[4].value
+        end_byte = row_info[5].value
+        how_to_pack = xstr(row_info[6].value)
+        filling_character = xstr(row_info[7].value)
+        date_format = xstr(row_info[9].value)
+
+        if file_name == "" and item == "":
+            files_list.append(file_info[:])
+            break
+
+        if file_name != "" and len(file_info) > 0:
+            files_list.append(file_info[:])
+            file_info.clear()
+
+        file_info_temp = (file_name, item, start_byte, end_byte, how_to_pack,
+                          filling_character, date_format)
+        file_info.append(file_info_temp)
+
+        row_index += 1
+    return files_list, row_index
+
+
+def read_koumku_ver_kahen(index, sheet):
+    """
+    可変長のファイルの情報を読み込むメソッド
+
+    """
+    files_list = []  # ファイル全ての情報のリスト
+    file_info = []  # inファイル単位の情報
+    row_index = index
 
     # ここで項目情報を１行１行取得している。
     # １行１行がタプル、それらが入力元名称で配列に分けられている、それらは全体で一つの配列にはいっている。
@@ -52,9 +105,7 @@ def reading_file_koumoku(sheet):
         file_info.append(file_info_temp)
 
         row_index += 1
-
-    join_info = read_join_info(row_index, sheet)
-    return files_list, join_info
+    return files_list, row_index
 
 
 def read_join_info(index, sheet):

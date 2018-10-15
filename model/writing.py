@@ -22,11 +22,15 @@ def generate_file(basic_info_list, sort_list, join_info, file_path):
 
     for i in range(len(sort_list)):
         sample = FileInfo()
-        if join_info is not None:
-            sample = header_and_data_generate(sample, sort_list[i], join_info[i])
+        if basic_info_list[i][2] == "可変長":
+            if join_info is not None:
+                sample = header_and_data_generate(sample, sort_list[i], join_info[i])
+            else:
+                sample = header_and_data_generate(sample, sort_list[i], None)
+            delimiter = sort_list[i][0][3]
         else:
-            sample = header_and_data_generate(sample, sort_list[i], None)
-        delimiter = sort_list[i][0][3]
+            sample = header_and_date_generate_ver_kotei(sample, sort_list)
+            delimiter = None
         execute_write(basic_info_list[i], target_file_path, sample, delimiter)
 
 
@@ -82,7 +86,6 @@ def execute_write(basic_info, file_path, sample, delimiter):
     else:
         tkinter.messagebox.showerror('Sample file generator ver2.0',
                                      "var2.0では固定長ファイルに対応しておりません。")
-        raise IOError
         # with open(file_name, "w+", encoding=encode_kind, newline="") as f:
 
 
@@ -101,6 +104,16 @@ def create_output_folder(file_path):
     name, ext = os.path.splitext(file_path)
     date_data = datetime.now().strftime("%Y_%m%d")
     return name + "_" + date_data + "_sample/"
+
+
+def header_and_date_generate_ver_kotei(sample, sort_list):
+    """
+    固定長のファイルのデータを作成するメソッド
+    """
+    print(sort_list)
+    print("from header_and_date_generate_ver_kotei")
+    pass
+
 
 
 def header_and_data_generate(sample, sort_list, join_info):

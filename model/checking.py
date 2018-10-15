@@ -35,7 +35,7 @@ def read_convert_info(sheet):
             row_index += 2
             break
         row_index += 1
-        if row_index > 100:
+        if row_index > 300:
             tkinter.messagebox.showerror('Sample file generator ver2.0',
                                          "一度環境にアップロードしたもののみサンプルデータを作成できます。")
             raise IOError
@@ -93,24 +93,34 @@ def inspect_main(key, group):
         print(temp)
         for num, cell in enumerate(temp):
             if num == 10:
+                if temp[10] is False:
+                    temp[10] = True
+                else:
+                    return
                 togo = key + 1
                 if togo in group:
                     print("let's go")
                     inspect_main(togo, group)
                 break
-            elif num == 0:
-                if temp[10] is False:
-                    temp[10] = True
-                else:
-                    return
             elif ">>" in cell:
                 key = adjust_togo(cell)
                 inspect_main(key, group)
             elif ">" in cell:
+                n = key
                 key = adjust_togo(cell)
-                inspect_main(key, group)
+                if group[key][10] is True:
+                    key = n
+                    continue
+                else:
+                    tkinter.messagebox.showerror('Sample file generator ver2.0',
+                                                 "変換詳細情報に不備が存在しています。")
     except ValueError:
-        return
+        tkinter.messagebox.showerror('Sample file generator ver2.0',
+                                     "変換詳細情報に不備が存在しています。")
+    except RuntimeError:
+        tkinter.messagebox.showerror('Sample file generator ver2.0',
+                                     "変換詳細情報に無限ループが存在しています。")
+        raise IOError
 
 
 def adjust_togo(cell):
@@ -149,6 +159,7 @@ def execute_coverage_test(sheet):
         results = group.values()
         for result in results:
             if result[10] is False:
+                print("False")
                 return False
             else:
                 print("True good job")
