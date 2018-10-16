@@ -114,13 +114,13 @@ def inspect_main(key, group):
                 else:
                     tkinter.messagebox.showerror('Sample file generator ver2.0',
                                                  "変換詳細情報に不備が存在しています。")
-    except ValueError:
+    except KeyError:
         tkinter.messagebox.showerror('Sample file generator ver2.0',
                                      "変換詳細情報に不備が存在しています。")
-    except RuntimeError:
+    except RecursionError:
         tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                     "変換詳細情報に無限ループが存在しています。")
-        raise IOError
+                                     "変換詳細情報に無限ループが存在している可能性があります。")
+
 
 
 def adjust_togo(cell):

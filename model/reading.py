@@ -161,7 +161,7 @@ def sorted_list(file_list):
 
 def reading_file_kihon(sheet):
     """
-
+    基本情報を読み込むメソッド。この情報がファイルの名称、文字コードなどに直接影響する。
     :param sheet: 変換定義書の基本情報
     :return:
     """

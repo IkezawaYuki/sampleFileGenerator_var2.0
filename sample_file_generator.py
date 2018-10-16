@@ -16,8 +16,8 @@ def main():
     root.withdraw()
     fTyp = [("", "*")]
     iDir = os.path.abspath(os.path.dirname(__file__))
-    # file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
-    file = "/Users/ikezaway/Downloads/1 2/kotei_1.xlsx"
+    file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
+    # file = "/Users/ikezaway/Downloads/1 2/kotei_1.xlsx"
     # file = "/Users/ikezaway/Downloads/test_data/IF21000099.xlsx"
 
     if file == "":
@@ -33,8 +33,7 @@ def main():
             execute(f)
     else:
         if "xls" not in file:
-             c = tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                              '変換定義書ではありません。')
+             c = tkinter.messagebox.showerror('Sample file generator ver2.0','変換定義書ではありません。')
              exit(0)
         execute(file)
 
@@ -60,10 +59,12 @@ def execute(file):
             sort_list = read.sorted_list(in_files)
 
         if sheet.name == "変換詳細情報":
-            if check.execute_coverage_test(sheet) is False:
+            check_result = check.execute_coverage_test(sheet)
+            if check_result is False:
                 c = tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                                 '以下の変換定義書の「変換詳細情報」を確認してください。')
-    write.generate_file(basic_info_list, sort_list, join_info, file)
+                                                 '以下の変換定義書の「変換詳細情報」を確認してください。\n' + file)
+    if check_result is True:
+        write.generate_file(basic_info_list, sort_list, join_info, file)
     return True
 
 
