@@ -16,8 +16,8 @@ def main():
     root.withdraw()
     fTyp = [("", "*")]
     iDir = os.path.abspath(os.path.dirname(__file__))
-    file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
-    # file = "/Users/ikezaway/Downloads/1 2/kotei_1.xlsx"
+    # file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
+    file = "/Users/ikezaway/Downloads/test_data/IF03100099.xlsx"
     # file = "/Users/ikezaway/Downloads/test_data/IF21000099.xlsx"
 
     if file == "":
@@ -26,14 +26,14 @@ def main():
     if type(file) is tuple:
         for f in file:
             if "xls" not in f:
-                c = tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                                 '以下のファイルは変換定義書ではありません。\n' + f)
+                tkinter.messagebox.showerror('Sample file generator ver2.0',
+                                             '以下のファイルは変換定義書ではありません。\n' + f)
                 continue
             print(f + " is executing...")
             execute(f)
     else:
         if "xls" not in file:
-             c = tkinter.messagebox.showerror('Sample file generator ver2.0','変換定義書ではありません。')
+             tkinter.messagebox.showerror('Sample file generator ver2.0','変換定義書ではありません。')
              exit(0)
         execute(file)
 
@@ -47,6 +47,7 @@ def execute(file):
     basic_info_list = []
     join_info = []
     sort_list = []
+    check_result = False
 
     for page in range(wb.nsheets):
         sheet = wb.sheet_by_index(page)
@@ -61,8 +62,8 @@ def execute(file):
         if sheet.name == "変換詳細情報":
             check_result = check.execute_coverage_test(sheet)
             if check_result is False:
-                c = tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                                 '以下の変換定義書の「変換詳細情報」を確認してください。\n' + file)
+                tkinter.messagebox.showerror('Sample file generator ver2.0',
+                                             '以下の変換定義書の「変換詳細情報」を確認してください。\n' + file)
     if check_result is True:
         write.generate_file(basic_info_list, sort_list, join_info, file)
     return True

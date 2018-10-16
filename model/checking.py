@@ -90,26 +90,23 @@ def inspect_main(key, group):
 
     try:
         temp = group[key]
-        print(temp)
         for num, cell in enumerate(temp):
             if num == 10:
                 if temp[10] is False:
                     temp[10] = True
                 else:
                     return
-                togo = key + 1
+                togo = increment_key(key)
                 if togo in group:
-                    print("let's go")
+                    print("let's go", str(togo))
                     inspect_main(togo, group)
                 break
             elif ">>" in cell:
-                key = adjust_togo(cell)
-                inspect_main(key, group)
+                togo = adjust_togo(cell)
+                inspect_main(togo, group)
             elif ">" in cell:
-                n = key
-                key = adjust_togo(cell)
-                if group[key][10] is True:
-                    key = n
+                togo = adjust_togo(cell)
+                if group[togo][10] is True:
                     continue
                 else:
                     tkinter.messagebox.showerror('Sample file generator ver2.0',
@@ -121,6 +118,16 @@ def inspect_main(key, group):
         tkinter.messagebox.showerror('Sample file generator ver2.0',
                                      "変換詳細情報に無限ループが存在している可能性があります。")
 
+
+def increment_key(key):
+    temp_base = str(key)
+    temp = temp_base[-2:]
+    if temp == "09":
+        key = temp_base[:-1] + "10"
+        print(key)
+        return int(key)
+    else:
+        return key + 1
 
 
 def adjust_togo(cell):
@@ -135,7 +142,6 @@ def adjust_togo(cell):
         togo = int(togo + "01")
         return togo
     elif ">" in cell:
-        print(cell)
         n = cell.rfind(">")
         togo = cell[n + 1:]
         togo = int(togo.replace("-", "0"))
@@ -153,15 +159,16 @@ def execute_coverage_test(sheet):
     for group in converte_rows:
         inspect_main(101, group)
 
-    print(converte_rows)
+    print('check finish!')
 
     for group in converte_rows:
         results = group.values()
         for result in results:
             if result[10] is False:
-                print("False")
+                print(result)
+                print("error is occurred")
                 return False
             else:
-                print("True good job")
+                continue
     return True
 

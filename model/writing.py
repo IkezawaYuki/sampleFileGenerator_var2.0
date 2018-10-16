@@ -85,7 +85,7 @@ def execute_write(basic_info, file_path, sample, delimiter):
                 writer.writerow(sample.data5)
     else:
         tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                     "var2.0では固定長ファイルに対応しておりません。")
+                                     "var2.0では固定長ファイルの出力は行いません。")
         # with open(file_name, "w+", encoding=encode_kind, newline="") as f:
 
 
@@ -110,9 +110,8 @@ def header_and_date_generate_ver_kotei(sample, sort_list):
     """
     固定長のファイルのデータを作成するメソッド
     """
-    print(sort_list)
-    print("from header_and_date_generate_ver_kotei")
-    pass
+    sample = FileInfo()
+    return sample
 
 
 
