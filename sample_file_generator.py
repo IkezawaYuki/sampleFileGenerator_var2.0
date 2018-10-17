@@ -16,8 +16,8 @@ def main():
     root.withdraw()
     fTyp = [("", "*")]
     iDir = os.path.abspath(os.path.dirname(__file__))
-    # file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
-    file = "/Users/ikezaway/Downloads/test_data/IF03100099.xlsx"
+    file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
+    # file = "/Users/ikezaway/Downloads/test_data/IF03100099.xlsx"
     # file = "/Users/ikezaway/Downloads/test_data/IF21000099.xlsx"
 
     if file == "":
@@ -26,18 +26,18 @@ def main():
     if type(file) is tuple:
         for f in file:
             if "xls" not in f:
-                tkinter.messagebox.showerror('Sample file generator ver2.0',
+                tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                              '以下のファイルは変換定義書ではありません。\n' + f)
                 continue
             print(f + " is executing...")
             execute(f)
     else:
         if "xls" not in file:
-             tkinter.messagebox.showerror('Sample file generator ver2.0','変換定義書ではありません。')
+             tkinter.messagebox.showerror('inspect -sample file generator ver3.0-','変換定義書ではありません。')
              exit(0)
         execute(file)
 
-    tkinter.messagebox.showinfo('Sample file generator ver2.0',
+    tkinter.messagebox.showinfo('inspect -sample file generator ver3.0-',
                                 '処理が正常終了しました。')
     exit(0)
 

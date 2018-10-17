@@ -23,7 +23,7 @@ def reading_file_koumoku(sheet):
             break
         row_index += 1
         if row_index > 100:
-            tkinter.messagebox.showerror('Sample file generator ver2.0',
+            tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                          "一度環境にアップロードしたもののみサンプルデータを作成できます。")
             raise IOError
 
@@ -159,6 +159,7 @@ def sorted_list(file_list):
     return sorted_result
 
 
+
 def reading_file_kihon(sheet):
     """
     基本情報を読み込むメソッド。この情報がファイルの名称、文字コードなどに直接影響する。
@@ -176,7 +177,7 @@ def reading_file_kihon(sheet):
             break
         row_index += 1
         if row_index > 100:
-            tkinter.messagebox.showerror('Sample file generator ver2.0',
+            tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                          "一度環境にアップロードしたもののみサンプルデータを作成できます。")
             raise IOError
 
@@ -191,7 +192,7 @@ def reading_file_kihon(sheet):
 
         if file_name == "":
             if file_name == "" and row_index == 26:
-                tkinter.messagebox.showinfo('Sample file generator ver2.0',
+                tkinter.messagebox.showinfo('inspect -sample file generator ver3.0-',
                                             "一度環境にアップロードしたもののみサンプルデータを作成できます。")
                 raise IOError
             break

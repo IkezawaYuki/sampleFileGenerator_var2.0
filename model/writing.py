@@ -84,8 +84,8 @@ def execute_write(basic_info, file_path, sample, delimiter):
                 writer.writerow(sample.data4)
                 writer.writerow(sample.data5)
     else:
-        tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                     "var2.0では固定長ファイルの出力は行いません。")
+        tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
+                                     "var3.0では固定長ファイルの出力はスキップします。")
         # with open(file_name, "w+", encoding=encode_kind, newline="") as f:
 
 

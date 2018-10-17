@@ -36,7 +36,7 @@ def read_convert_info(sheet):
             break
         row_index += 1
         if row_index > 300:
-            tkinter.messagebox.showerror('Sample file generator ver2.0',
+            tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                          "一度環境にアップロードしたもののみサンプルデータを作成できます。")
             raise IOError
 
@@ -94,8 +94,6 @@ def inspect_main(key, group):
             if num == 10:
                 if temp[10] is False:
                     temp[10] = True
-                else:
-                    return
                 togo = increment_key(key)
                 if togo in group:
                     print("let's go", str(togo))
@@ -109,14 +107,14 @@ def inspect_main(key, group):
                 if group[togo][10] is True:
                     continue
                 else:
-                    tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                                 "変換詳細情報に不備が存在しています。")
+                    tkinter.messagebox.showerror('Sinspect -sample file generator ver3.0-',
+                                                 "変換詳細情報に不備が存在しています。以下の変換詳細情報を見直してください \n" + temp)
     except KeyError:
-        tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                     "変換詳細情報に不備が存在しています。")
+        tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
+                                     "変換詳細情報に不備が存在しています。以下の変換詳細情報を見直してください \n" + temp)
     except RecursionError:
-        tkinter.messagebox.showerror('Sample file generator ver2.0',
-                                     "変換詳細情報に無限ループが存在している可能性があります。")
+        tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
+                                     "変換詳細情報に無限ループが存在しています。以下の変換詳細情報を見直してください。\n" + group)
 
 
 def increment_key(key):
