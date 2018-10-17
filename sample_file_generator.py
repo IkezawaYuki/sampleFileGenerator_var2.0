@@ -62,7 +62,7 @@ def execute(file):
         if sheet.name == "変換詳細情報":
             check_result = check.execute_coverage_test(sheet)
             if check_result is False:
-                tkinter.messagebox.showerror('Sample file generator ver2.0',
+                tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                              '以下の変換定義書の「変換詳細情報」を確認してください。\n' + file)
     if check_result is True:
         write.generate_file(basic_info_list, sort_list, join_info, file)
