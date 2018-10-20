@@ -22,7 +22,7 @@ def reading_file_koumoku(sheet):
             row_index += 2
             break
         row_index += 1
-        if row_index > 100:
+        if row_index > 200:
             tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                          "一度環境にアップロードしたもののみサンプルデータを作成できます。")
             raise IOError
@@ -157,7 +157,6 @@ def sorted_list(file_list):
         sorted_result.append(sort_list[:])
     print(sorted_result)
     return sorted_result
-
 
 
 def reading_file_kihon(sheet):

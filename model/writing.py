@@ -70,7 +70,7 @@ def execute_write(basic_info, file_path, sample, delimiter):
                 writer.writerow(sample.data5)
         else:
             with open(file_name, "w+", encoding=encode_kind, newline="", errors="replace") as f:
-                writer = csv.writer(f, quotechar='"', lineterminator='\n', quoting=csv.QUOTE_ALL)
+                writer = csv.writer(f, lineterminator='\n', quoting=csv.QUOTE_NONNUMERIC)
 
                 if header_flag == "0" or header_flag == 0:
                     header_list = list(

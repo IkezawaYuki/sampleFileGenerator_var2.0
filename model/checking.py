@@ -56,7 +56,7 @@ def read_convert_info(sheet):
                        xstr(row_info[14].value)]
 
             # 読み込む行がなくなった時
-            if henkan_name == "" and lane == "" and order == "":
+            if lane == "" and order == "":
                 break
 
             if henkan_name != "" and len(temp_rows) != 0:
@@ -80,14 +80,17 @@ def read_convert_info(sheet):
     return converte_rows
 
 
-def inspect_main(key, group):
+def inspect_main(key, group, rooting):
     """
     変換詳細情報のチェックのメインルーチン。各行に対して、通った行にはTrue、通らなかった行はFalseとなる。
     :param key: レーン、順序から作った３桁のキー
     :param group: 変換詳細の情報を、変換名称ごとに分けたもの。
+    :param rooting: 処理の軌跡
     :return:
     """
-
+    roots = rooting.copy()
+    roots.append(key)
+    print(roots)
     try:
         temp = group[key]
         for num, cell in enumerate(temp):
@@ -97,21 +100,21 @@ def inspect_main(key, group):
                 togo = increment_key(key)
                 if togo in group:
                     print("let's go", str(togo))
-                    inspect_main(togo, group)
+                    inspect_main(togo, group, roots)
                 break
             elif ">>" in cell:
                 togo = adjust_togo(cell)
-                inspect_main(togo, group)
+                inspect_main(togo, group, roots)
             elif ">" in cell:
                 togo = adjust_togo(cell)
-                if group[togo][10] is True:
+                if togo in roots:
                     continue
                 else:
                     tkinter.messagebox.showerror('Sinspect -sample file generator ver3.0-',
-                                                 "変換詳細情報に不備が存在しています。以下の変換詳細情報を見直してください \n" + temp)
+                                                 "変換詳細情報に通っていない結果を参照している箇所があります。以下の変換詳細情報を見直してください \n" + temp)
     except KeyError:
         tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
-                                     "変換詳細情報に不備が存在しています。以下の変換詳細情報を見直してください \n" + temp)
+                                     "変換詳細情報に存在しない箇所を参照いている箇所があります。以下の変換詳細情報を見直してください \n" + temp)
     except RecursionError:
         tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                      "変換詳細情報に無限ループが存在しています。以下の変換詳細情報を見直してください。\n" + group)
@@ -155,7 +158,8 @@ def execute_coverage_test(sheet):
     converte_rows = read_convert_info(sheet)
 
     for group in converte_rows:
-        inspect_main(101, group)
+        rooting = []
+        inspect_main(101, group, rooting)
 
     print('check finish!')
 
@@ -164,7 +168,9 @@ def execute_coverage_test(sheet):
         for result in results:
             if result[10] is False:
                 print(result)
-                print("error is occurred")
+                tkinter.messagebox.showerror(
+                    'inspect -sample file generator ver3.0-',
+                    "変換詳細情報に通っていない処理が存在しています。以下の変換詳細情報を見直してください。\n" + group)
                 return False
             else:
                 continue
