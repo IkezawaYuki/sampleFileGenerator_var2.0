@@ -50,10 +50,13 @@ def read_convert_info(sheet):
             henkan_name = xstr(row_info[2].value)
             lane = row_info[3].value
             order = row_info[4].value
+
+
             details = [xstr(row_info[5].value), xstr(row_info[6].value), xstr(row_info[7].value),
                        xstr(row_info[8].value), xstr(row_info[9].value), xstr(row_info[10].value),
                        xstr(row_info[11].value), xstr(row_info[12].value), xstr(row_info[13].value),
                        xstr(row_info[14].value)]
+
 
             # 読み込む行がなくなった時
             if lane == "" and order == "":
@@ -161,6 +164,12 @@ def execute_coverage_test(sheet):
     :return: 通らない行が存在する場合、この時点でエラーメッセージ出力
     """
     converte_rows = read_convert_info(sheet)
+    for i in converte_rows:
+        print(i)
+
+    print("--check--")
+    if len(converte_rows[0]) == 0:
+        return True
 
     for group in converte_rows:
         rooting = []
