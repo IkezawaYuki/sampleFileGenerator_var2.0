@@ -112,12 +112,17 @@ def inspect_main(key, group, rooting):
                 else:
                     tkinter.messagebox.showerror('Sinspect -sample file generator ver3.0-',
                                                  "変換詳細情報に通っていない結果を参照している箇所があります。以下の変換詳細情報を見直してください \n" + temp)
+                    exit(0)
     except KeyError:
+        error_row = rooting[-1]
         tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
-                                     "変換詳細情報に存在しない箇所を参照している箇所があります。以下の変換詳細情報を見直してください \n" + group)
+                                     "変換詳細情報に存在しない箇所を参照している箇所があります。以下の変換詳細情報を見直してください \n" + str(group[error_row]))
+        exit(0)
     except RecursionError:
+        error_row = rooting[-1]
         tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
-                                     "変換詳細情報に無限ループが存在しています。以下の変換詳細情報を見直してください。\n" + group)
+                                     "変換詳細情報に無限ループが存在しています。以下の変換詳細情報を見直してください。\n" + str(group[error_row]))
+        exit(0)
 
 
 def increment_key(key):
