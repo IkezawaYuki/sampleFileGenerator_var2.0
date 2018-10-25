@@ -51,8 +51,13 @@ def read_convert_info(sheet):
             lane = row_info[3].value
             order = row_info[4].value
 
-
-            details = [xstr(row_info[5].value), xstr(row_info[6].value), xstr(row_info[7].value),
+            if len(row_info) == 14:
+                details = [xstr(row_info[5].value), xstr(row_info[6].value), xstr(row_info[7].value),
+                           xstr(row_info[8].value), xstr(row_info[9].value), xstr(row_info[10].value),
+                           xstr(row_info[11].value), xstr(row_info[12].value), xstr(row_info[13].value),
+                           None]
+            else:
+                details = [xstr(row_info[5].value), xstr(row_info[6].value), xstr(row_info[7].value),
                        xstr(row_info[8].value), xstr(row_info[9].value), xstr(row_info[10].value),
                        xstr(row_info[11].value), xstr(row_info[12].value), xstr(row_info[13].value),
                        xstr(row_info[14].value)]
@@ -76,10 +81,6 @@ def read_convert_info(sheet):
         except IndexError:
             converte_rows.append(temp_rows)
             break
-    print(converte_rows)
-    for i in converte_rows:
-        print(i)
-    print("--上がデータ構造--")
     return converte_rows
 
 
@@ -97,7 +98,9 @@ def inspect_main(key, group, rooting):
     try:
         temp = group[key]
         for num, cell in enumerate(temp):
-            if num == 10:
+            if cell is None:
+                continue
+            elif num == 10:
                 if temp[10] is False:
                     temp[10] = True
                 togo = increment_key(key)
@@ -114,7 +117,7 @@ def inspect_main(key, group, rooting):
                     continue
                 else:
                     tkinter.messagebox.showerror('Sinspect -sample file generator ver3.0-',
-                                                 "変換詳細情報に通っていない結果を参照している箇所があります。以下の変換詳細情報を見直してください \n" + temp)
+                                                 "変換詳細情報に通っていない結果を参照している箇所があります。以下の変換詳細情報を見直してください \n" + str(temp))
                     exit(0)
     except KeyError:
         error_row = rooting[-1]
