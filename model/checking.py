@@ -55,7 +55,7 @@ def read_convert_info(sheet):
                 details = [xstr(row_info[5].value), xstr(row_info[6].value), xstr(row_info[7].value),
                            xstr(row_info[8].value), xstr(row_info[9].value), xstr(row_info[10].value),
                            xstr(row_info[11].value), xstr(row_info[12].value), xstr(row_info[13].value),
-                           None]
+                           xstr(None)]
             else:
                 details = [xstr(row_info[5].value), xstr(row_info[6].value), xstr(row_info[7].value),
                        xstr(row_info[8].value), xstr(row_info[9].value), xstr(row_info[10].value),
@@ -98,9 +98,7 @@ def inspect_main(key, group, rooting):
     try:
         temp = group[key]
         for num, cell in enumerate(temp):
-            if cell is None:
-                continue
-            elif num == 10:
+            if num == 10:
                 if temp[10] is False:
                     temp[10] = True
                 togo = increment_key(key)
@@ -116,18 +114,18 @@ def inspect_main(key, group, rooting):
                 if togo in roots:
                     continue
                 else:
-                    tkinter.messagebox.showerror('Sinspect -sample file generator ver3.0-',
-                                                 "変換詳細情報に通っていない結果を参照している箇所があります。以下の変換詳細情報を見直してください \n" + str(temp))
+                    tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
+                                                 "変換詳細情報に通っていない結果を参照している箇所があります。\n以下の変換詳細情報を見直してください \n" + str(temp))
                     exit(0)
     except KeyError:
         error_row = rooting[-1]
         tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
-                                     "変換詳細情報に存在しない箇所を参照している箇所があります。以下の変換詳細情報を見直してください \n" + str(group[error_row]))
+                                     "変換詳細情報に存在しない箇所を参照している箇所があります。\n以下の変換詳細情報を見直してください \n" + str(group[error_row]))
         exit(0)
     except RecursionError:
         error_row = rooting[-1]
         tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
-                                     "変換詳細情報に無限ループが存在しています。以下の変換詳細情報を見直してください。\n" + str(group[error_row]))
+                                     "変換詳細情報に無限ループが存在しています。\n以下の変換詳細情報を見直してください。\n" + str(group[error_row]))
         exit(0)
 
 
