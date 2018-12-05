@@ -1,5 +1,6 @@
 import tkinter.messagebox
 import math
+import generator_config as l
 
 
 def xstr(s):
@@ -97,6 +98,7 @@ def inspect_main(key, group, rooting):
     print(roots)
     try:
         temp = group[key]
+        l.logger.info(temp, "←この行のチェックを行っています。")
         for num, cell in enumerate(temp):
             if num == 10:
                 if temp[10] is False:
@@ -114,16 +116,19 @@ def inspect_main(key, group, rooting):
                 if togo in roots:
                     continue
                 else:
+                    l.logger.info(temp, "←こちらの変換がNullPointerExceptionを引き起こしています。")
                     tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                                  "変換詳細情報に通っていない結果を参照している箇所があります。\n以下の変換詳細情報を見直してください \n" + str(temp))
                     exit(0)
     except KeyError:
         error_row = rooting[-1]
+        l.logger.info(group[error_row], "←こちらの変換がNullPointerExceptionを引き起こしています。")
         tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                      "変換詳細情報に存在しない箇所を参照している箇所があります。\n以下の変換詳細情報を見直してください \n" + str(group[error_row]))
         exit(0)
     except RecursionError:
         error_row = rooting[-1]
+        l.logger.info(group[error_row])
         tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                      "変換詳細情報に無限ループが存在しています。\n以下の変換詳細情報を見直してください。\n" + str(group[error_row]))
         exit(0)
@@ -166,28 +171,32 @@ def execute_coverage_test(sheet):
     """
     converte_rows = read_convert_info(sheet)
     for i in converte_rows:
+
         print(i)
 
-    print("--check--")
+    l.logger.info("check is start.")
     if len(converte_rows[0]) == 0:
+        l.logger.info("変換が存在しないのでスキップ。")
         return True
 
     for group in converte_rows:
+        l.logger.info(group, " ←こちらの変換のチェックを行います。")
         rooting = []
         inspect_main(101, group, rooting)
 
-    print('check finish!')
+
 
     for group in converte_rows:
         results = group.values()
         for result in results:
             if result[10] is False:
-                print(result)
+                l.logger.info(result, "←こちらの変換行を通っていません。")
                 tkinter.messagebox.showerror(
                     'inspect -sample file generator ver3.0-',
                     "変換詳細情報に通っていない処理が存在しています。以下の変換詳細情報を見直してください。\n" + group)
                 return False
             else:
                 continue
+    l.logger.info("変換定義にロジック起因のエラーはありません。")
     return True
 

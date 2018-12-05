@@ -10,6 +10,13 @@ import model.reading as read
 import model.writing as write
 import model.checking as check
 
+h = logging.FileHandler("sample_file_generator.log", encoding="utf-8")
+logger = logging.getLogger(__name__)
+fmt = logging.Formatter("%(asctime)s %(levelname)s %(name)s :%(message)s")
+h.setFormatter(fmt)
+logger.setLevel(logging.DEBUG)
+logger.addHandler(h)
+
 
 def main():
     root = tkinter.Tk()
@@ -25,17 +32,21 @@ def main():
     if type(file) is tuple:
         for f in file:
             if "xls" not in f:
+                logger.info(f, " is not data hub.")
                 tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                              '以下のファイルは変換定義書ではありません。\n' + f)
                 continue
-            print(f + " is executing...")
+            logger.info(f, " is processing...")
             execute(f)
     else:
         if "xls" not in file:
              tkinter.messagebox.showerror('inspect -sample file generator ver3.0-','変換定義書ではありません。')
+             logger.info(f, " is not data hub.")
              exit(0)
+        logger.info(f, " is processing...")
         execute(file)
 
+    logger.info(f, "is success.")
     tkinter.messagebox.showinfo('inspect -sample file generator ver3.0-',
                                 '処理が正常終了しました。')
     exit(0)

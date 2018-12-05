@@ -19,7 +19,7 @@ class FileInfo:
 
 def generate_file(basic_info_list, sort_list, join_info, file_path):
     target_file_path = create_output_folder(file_path)
-
+    print(sort_list)
     for i in range(len(sort_list)):
         sample = FileInfo()
         if basic_info_list[i][2] == "可変長":
