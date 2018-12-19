@@ -19,7 +19,6 @@ class FileInfo:
 
 def generate_file(basic_info_list, sort_list, join_info, file_path):
     target_file_path = create_output_folder(file_path)
-    print(sort_list)
     for i in range(len(sort_list)):
         sample = FileInfo()
         if basic_info_list[i][2] == "可変長":
@@ -48,7 +47,6 @@ def execute_write(basic_info, file_path, sample, delimiter):
     format_kind = basic_info[2]
     delimiter = delimiter
     header_flag = basic_info[5]
-    print(header_flag)
 
     if format_kind == "可変長":
         if not os.path.isdir(file_path):

@@ -85,6 +85,19 @@ def read_convert_info(sheet):
     return converte_rows
 
 
+def reference_row(key, group, rooting):
+    temp = group[key]
+    for num, cell in enumerate(temp):
+        if num == 10:
+            return False
+        if ">>" in cell:
+            l.logger.info("無限ループが発生します。変換詳細情報を確認してください。")
+            tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
+                                         "←この行を参照しようとして、無限ループが発生します。この行を参照する行を確認してください。\nこの行を参照する行を確認してください。 \n" + str(temp))
+            exit(0)
+
+
+
 def inspect_main(key, group, rooting):
     """
     変換詳細情報のチェックのメインルーチン。各行に対して、通った行にはTrue、通らなかった行はFalseとなる。
@@ -95,17 +108,16 @@ def inspect_main(key, group, rooting):
     """
     roots = rooting.copy()
     roots.append(key)
-    print(roots)
+    l.logger.info(roots)
     try:
         temp = group[key]
-        l.logger.info(temp, "←この行のチェックを行っています。")
         for num, cell in enumerate(temp):
             if num == 10:
                 if temp[10] is False:
                     temp[10] = True
                 togo = increment_key(key)
                 if togo in group:
-                    print("let's go", str(togo))
+                    l.logger.info("let's go" +  str(togo))
                     inspect_main(togo, group, roots)
                 break
             elif ">>" in cell:
@@ -114,15 +126,16 @@ def inspect_main(key, group, rooting):
             elif ">" in cell:
                 togo = adjust_togo(cell)
                 if togo in roots:
-                    continue
+                    if reference_row(togo, group, roots):
+                        continue
                 else:
-                    l.logger.info(temp, "←こちらの変換がNullPointerExceptionを引き起こしています。")
+                    l.logger.info("NullPointerExceptionを引き起こしています。")
                     tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                                  "変換詳細情報に通っていない結果を参照している箇所があります。\n以下の変換詳細情報を見直してください \n" + str(temp))
                     exit(0)
     except KeyError:
         error_row = rooting[-1]
-        l.logger.info(group[error_row], "←こちらの変換がNullPointerExceptionを引き起こしています。")
+        l.logger.info("NullPointerExceptionを引き起こしています。")
         tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                      "変換詳細情報に存在しない箇所を参照している箇所があります。\n以下の変換詳細情報を見直してください \n" + str(group[error_row]))
         exit(0)
@@ -139,7 +152,7 @@ def increment_key(key):
     temp = temp_base[-2:]
     if temp == "09":
         key = temp_base[:-1] + "10"
-        print(key)
+        l.logger.info(key)
         return int(key)
     else:
         return key + 1
@@ -170,9 +183,6 @@ def execute_coverage_test(sheet):
     :return: 通らない行が存在する場合、この時点でエラーメッセージ出力
     """
     converte_rows = read_convert_info(sheet)
-    for i in converte_rows:
-
-        print(i)
 
     l.logger.info("check is start.")
     if len(converte_rows[0]) == 0:
@@ -180,7 +190,7 @@ def execute_coverage_test(sheet):
         return True
 
     for group in converte_rows:
-        l.logger.info(group, " ←こちらの変換のチェックを行います。")
+        l.logger.info("こちらの変換のチェックを行います。")
         rooting = []
         inspect_main(101, group, rooting)
 

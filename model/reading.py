@@ -28,10 +28,8 @@ def reading_file_koumoku(sheet):
             raise IOError
 
     if "可変" in info_column:
-        print("可変長")
         files_list, row_index = read_koumku_ver_kahen(row_index, sheet)
     else:
-        print("固定長")
         files_list, row_index = read_koumoku_ver_kotei(row_index, sheet)
     join_info = read_join_info(row_index, sheet)
     return files_list, join_info
@@ -155,7 +153,6 @@ def sorted_list(file_list):
     for temp in files:
         sort_list = sorted(temp, key=itemgetter(2))
         sorted_result.append(sort_list[:])
-    print(sorted_result)
     return sorted_result
 
 

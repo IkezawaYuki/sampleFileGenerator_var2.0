@@ -36,14 +36,14 @@ def main():
                 tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                              '以下のファイルは変換定義書ではありません。\n' + f)
                 continue
-            logger.info(f, " is processing...")
+            logger.info(f)
             execute(f)
     else:
         if "xls" not in file:
              tkinter.messagebox.showerror('inspect -sample file generator ver3.0-','変換定義書ではありません。')
-             logger.info(f, " is not data hub.")
-             exit(0)
-        logger.info(f, " is processing...")
+             logger.info(file, " is not data hub.")
+             exit(1)
+        logger.info(file, " is processing...")
         execute(file)
 
     logger.info(f, "is success.")
