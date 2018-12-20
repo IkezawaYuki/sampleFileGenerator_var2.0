@@ -103,7 +103,7 @@ def reference_row(key, group, g_name):
         if ">>" in cell:
             l.logger.info(g_name + " " + str(key) + " is dangerous logic.")
             tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
-                                         "意図しない挙動をする可能性があります\n\n変換名称：" + g_name + "\n\n" + str(temp))
+                                         "以下の行を参照しようとする際、問題が起きる可能性があります。\nロジックを修正してください。\n\n変換名称：" + g_name + "\n\n" + str(temp))
             sys.exit(0)
 
 
