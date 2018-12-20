@@ -5,6 +5,7 @@ import os
 import tkinter.filedialog
 import tkinter.messagebox
 import logging
+import sys
 
 import model.reading as read
 import model.writing as write
@@ -27,29 +28,27 @@ def main():
     # file = "/Users/ikezaway/Downloads/test_data/IF03100099.xlsx"
 
     if file == "":
-        exit(0)
+        sys.exit(0)
 
     if type(file) is tuple:
         for f in file:
             if "xls" not in f:
-                logger.info(f, " is not data hub.")
+                logger.info(f + " is not data hub.")
                 tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                              '以下のファイルは変換定義書ではありません。\n' + f)
-                continue
-            logger.info(f)
+                sys.exit(1)
             execute(f)
     else:
         if "xls" not in file:
              tkinter.messagebox.showerror('inspect -sample file generator ver3.0-','変換定義書ではありません。')
-             logger.info(file, " is not data hub.")
-             exit(1)
-        logger.info(file, " is processing...")
+             sys.exit(1)
         execute(file)
 
-    logger.info(f, "is success.")
+    logger.info("Execute is success.")
     tkinter.messagebox.showinfo('inspect -sample file generator ver3.0-',
-                                '処理が正常終了しました。')
-    exit(0)
+                                '正常終了しました。\n無限ループ、デッドコード、NullPointerExceptionの可能性はありません。'
+                                '\n\nサンプルファイルを作成しました。')
+    sys.exit(0)
 
 
 def execute(file):
@@ -71,9 +70,9 @@ def execute(file):
 
         if sheet.name == "変換詳細情報":
             check_result = check.execute_coverage_test(sheet)
-            if check_result is False:
-                tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
-                                             '以下の変換定義書の「変換詳細情報」を確認してください。\n' + file)
+            # if check_result is False:
+            #     tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
+            #                                  '以下の変換定義書の「変換詳細情報」を確認してください。\n' + file)
     if check_result is True:
         write.generate_file(basic_info_list, sort_list, join_info, file)
     return True

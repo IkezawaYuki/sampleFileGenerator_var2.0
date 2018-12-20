@@ -1,3 +1,4 @@
+import sys
 import tkinter.messagebox
 from operator import itemgetter
 
@@ -190,7 +191,7 @@ def reading_file_kihon(sheet):
             if file_name == "" and row_index == 26:
                 tkinter.messagebox.showinfo('inspect -sample file generator ver3.0-',
                                             "一度環境にアップロードしたもののみサンプルデータを作成できます。")
-                raise IOError
+                sys.exit(0)
             break
         temp_file_info = (file_name, encode, format_kind, new_line_code, delimiter, header)
         file_kihon_list.append(temp_file_info)

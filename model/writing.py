@@ -1,5 +1,6 @@
 import os
 import csv
+import sys
 import tkinter.messagebox
 from _datetime import datetime
 
@@ -19,18 +20,23 @@ class FileInfo:
 
 def generate_file(basic_info_list, sort_list, join_info, file_path):
     target_file_path = create_output_folder(file_path)
-    for i in range(len(sort_list)):
-        sample = FileInfo()
-        if basic_info_list[i][2] == "可変長":
-            if join_info is not None:
-                sample = header_and_data_generate(sample, sort_list[i], join_info[i])
+    try:
+        for i in range(len(sort_list)):
+            sample = FileInfo()
+            if basic_info_list[i][2] == "可変長":
+                if join_info is not None:
+                    sample = header_and_data_generate(sample, sort_list[i], join_info[i])
+                else:
+                    sample = header_and_data_generate(sample, sort_list[i], None)
+                delimiter = sort_list[i][0][3]
             else:
-                sample = header_and_data_generate(sample, sort_list[i], None)
-            delimiter = sort_list[i][0][3]
-        else:
-            sample = header_and_date_generate_ver_kotei(sample, sort_list)
-            delimiter = None
-        execute_write(basic_info_list[i], target_file_path, sample, delimiter)
+                sample = header_and_date_generate_ver_kotei(sample, sort_list)
+                delimiter = None
+            execute_write(basic_info_list[i], target_file_path, sample, delimiter)
+    except IndexError:
+        tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
+                                     "一度環境に適用された変換定義書でないと、\n正しく情報を読み取れません。\n環境適用後、HUEからダウンロードしたものに使用してください。")
+        sys.exit(0)
 
 
 def execute_write(basic_info, file_path, sample, delimiter):
@@ -47,7 +53,7 @@ def execute_write(basic_info, file_path, sample, delimiter):
     format_kind = basic_info[2]
     delimiter = delimiter
     header_flag = basic_info[5]
-
+    print(header_flag)
     if format_kind == "可変長":
         if not os.path.isdir(file_path):
             os.makedirs(file_path)
@@ -55,7 +61,7 @@ def execute_write(basic_info, file_path, sample, delimiter):
         if delimiter == '':
             with open(file_name, "w+", encoding=encode_kind, newline="") as f:
                 writer = csv.writer(f, lineterminator='\n')
-                if header_flag == "0" or header_flag == 0:
+                if header_flag == "0" or header_flag == 0 or header_flag == 0.0 or header_flag == "0.0":
                     header_list = list(
                         map(lambda header: header + "<削除必須>", sample.header))
                     writer.writerow(header_list)
@@ -70,7 +76,7 @@ def execute_write(basic_info, file_path, sample, delimiter):
             with open(file_name, "w+", encoding=encode_kind, newline="", errors="replace") as f:
                 writer = csv.writer(f, lineterminator='\n', quoting=csv.QUOTE_NONNUMERIC)
 
-                if header_flag == "0" or header_flag == 0:
+                if header_flag == "0" or header_flag == 0 or header_flag == 0.0 or header_flag == "0.0":
                     header_list = list(
                         map(lambda header: header + "<削除必須>", sample.header))
                     writer.writerow(header_list)
@@ -110,7 +116,6 @@ def header_and_date_generate_ver_kotei(sample, sort_list):
     """
     sample = FileInfo()
     return sample
-
 
 
 def header_and_data_generate(sample, sort_list, join_info):
