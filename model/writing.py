@@ -16,6 +16,11 @@ class FileInfo:
         self.data3 = []
         self.data4 = []
         self.data5 = []
+        self.data_kotei_1 = ""
+        self.data_kotei_2 = ""
+        self.data_kotei_3 = ""
+        self.data_kotei_4 = ""
+        self.data_kotei_5 = ""
 
 
 def generate_file(basic_info_list, sort_list, join_info, file_path):
@@ -30,7 +35,10 @@ def generate_file(basic_info_list, sort_list, join_info, file_path):
                     sample = header_and_data_generate(sample, sort_list[i], None)
                 delimiter = sort_list[i][0][3]
             else:
-                sample = header_and_date_generate_ver_kotei(sample, sort_list)
+                if join_info is not None:
+                    sample = header_and_data_generate_ver_kotei(sample, sort_list[i], join_info[i])
+                else:
+                    sample = header_and_data_generate_ver_kotei(sample, sort_list[i], None)
                 delimiter = None
             execute_write(basic_info_list[i], target_file_path, sample, delimiter)
     except IndexError:
@@ -110,11 +118,16 @@ def create_output_folder(file_path):
     return name + "_" + date_data + "_sample/"
 
 
-def header_and_date_generate_ver_kotei(sample, sort_list):
+def header_and_data_generate_ver_kotei(sample, in_file, join_info):
     """
     固定長のファイルのデータを作成するメソッド
     """
-    sample = FileInfo()
+
+    print(in_file)
+
+    string = "3.0"
+    int_num = int(float(string))
+
     return sample
 
 
@@ -196,7 +209,35 @@ def adjust_date_format(sample, date_format):
         sample.data4.append(str(day))
         sample.data5.append(str(day))
     elif date_format == "YYYY/MM":
+        day = datetime.now().strftime("%Y/%m")
+        sample.data1.append(str(day))
+        sample.data2.append(str(day))
+        sample.data3.append(str(day))
+        sample.data4.append(str(day))
+        sample.data5.append(str(day))
+    elif date_format == "MM/DD":
         day = datetime.now().strftime("%m/%d")
+        sample.data1.append(str(day))
+        sample.data2.append(str(day))
+        sample.data3.append(str(day))
+        sample.data4.append(str(day))
+        sample.data5.append(str(day))
+    elif date_format == "YYYY":
+        day = datetime.now().strftime("%Y")
+        sample.data1.append(str(day))
+        sample.data2.append(str(day))
+        sample.data3.append(str(day))
+        sample.data4.append(str(day))
+        sample.data5.append(str(day))
+    elif date_format == "MM":
+        day = datetime.now().strftime("%m")
+        sample.data1.append(str(day))
+        sample.data2.append(str(day))
+        sample.data3.append(str(day))
+        sample.data4.append(str(day))
+        sample.data5.append(str(day))
+    elif date_format == "DD":
+        day = datetime.now().strftime("%d")
         sample.data1.append(str(day))
         sample.data2.append(str(day))
         sample.data3.append(str(day))
