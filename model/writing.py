@@ -149,11 +149,11 @@ def header_and_data_generate(sample, sort_list, join_info):
 
         if join_info is not None:
             if header_info in join_info[1]:
-                sample.data1.append("key_11111")
-                sample.data2.append("key_22222")
-                sample.data3.append("key_33333")
-                sample.data4.append("key_44444")
-                sample.data5.append("key_55555")
+                sample.data1.append("key_1")
+                sample.data2.append("key_2")
+                sample.data3.append("key_3")
+                sample.data4.append("key_4")
+                sample.data5.append("key_5")
                 counter += 1
                 continue
 
