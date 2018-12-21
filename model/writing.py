@@ -61,7 +61,7 @@ def execute_write(basic_info, file_path, sample, delimiter):
     format_kind = basic_info[2]
     delimiter = delimiter
     header_flag = basic_info[5]
-    print(header_flag)
+
     if format_kind == "可変長":
         if not os.path.isdir(file_path):
             os.makedirs(file_path)
@@ -96,6 +96,7 @@ def execute_write(basic_info, file_path, sample, delimiter):
                 writer.writerow(sample.data4)
                 writer.writerow(sample.data5)
     else:
+        print(sample.data_kotei_1)
         tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                      "var3.0では固定長ファイルの出力はスキップします。")
         # with open(file_name, "w+", encoding=encode_kind, newline="") as f:
@@ -118,15 +119,57 @@ def create_output_folder(file_path):
     return name + "_" + date_data + "_sample/"
 
 
+def get_row_info(row_info):
+    start_byte = int(float(row_info[2]))
+    end_byte = int(float(row_info[3]))
+    right_or_left = row_info[4]
+    filling_char = row_info[5]
+    date_format = row_info[6]
+    if right_or_left == "右詰め":
+        right_or_left = ">"
+    else:
+        right_or_left = "<"
+
+    if filling_char == "半角スペース":
+        filling_char = " "
+    elif filling_char == "全角スペース":
+        filling_char = "　"
+
+    return start_byte, end_byte, date_format, right_or_left, filling_char
+
+
 def header_and_data_generate_ver_kotei(sample, in_file, join_info):
     """
     固定長のファイルのデータを作成するメソッド
     """
+    item_count = 1
+    byte_counter = 0
+    temp = ""
 
-    print(in_file)
+    for row_info in in_file:
+        start_byte, end_byte, date_format, right_or_left, filling_char = get_row_info(row_info)
 
-    string = "3.0"
-    int_num = int(float(string))
+        if start_byte != byte_counter + 1:
+            for _ in range(byte_counter+1, start_byte):
+                temp += "*"
+
+        word = ""
+        for _ in range(start_byte, end_byte+1):
+            word += str(item_count)
+        if date_format != "":
+            date_data = adjust_date_format_ver_kotei(date_format)
+            format_char = "{:" + right_or_left + filling_char + str(len(word)) + "}"
+            word = format_char.format(date_data)
+
+        temp += word
+        item_count += 1
+        byte_counter = end_byte
+
+    sample.data_kotei_1 = temp
+    sample.data_kotei_2 = temp
+    sample.data_kotei_3 = temp
+    sample.data_kotei_4 = temp
+    sample.data_kotei_5 = temp
 
     return sample
 
@@ -244,3 +287,25 @@ def adjust_date_format(sample, date_format):
         sample.data4.append(str(day))
         sample.data5.append(str(day))
 
+
+def adjust_date_format_ver_kotei(date_format):
+    if date_format == "YYYY/MM/DD":
+        day = datetime.now().strftime("%Y/%m/%d")
+    elif date_format == "YYYYMMDD":
+        day = datetime.now().strftime("%Y%m%d")
+    elif date_format == "YYYYMM":
+        day = datetime.now().strftime("%Y%m")
+    elif date_format == "MMDD":
+        day = datetime.now().strftime("%m%d")
+    elif date_format == "YYYY/MM":
+        day = datetime.now().strftime("%Y/%m")
+    elif date_format == "MM/DD":
+        day = datetime.now().strftime("%m/%d")
+    elif date_format == "YYYY":
+        day = datetime.now().strftime("%Y")
+    elif date_format == "MM":
+        day = datetime.now().strftime("%m")
+    elif date_format == "DD":
+        day = datetime.now().strftime("%d")
+
+    return str(day)
