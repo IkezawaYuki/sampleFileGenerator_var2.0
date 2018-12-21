@@ -4,6 +4,8 @@ import sys
 import tkinter.messagebox
 from _datetime import datetime
 
+import generator_config as l
+
 
 class FileInfo:
     """
@@ -96,10 +98,22 @@ def execute_write(basic_info, file_path, sample, delimiter):
                 writer.writerow(sample.data4)
                 writer.writerow(sample.data5)
     else:
-        print(sample.data_kotei_1)
-        tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
-                                     "var3.0では固定長ファイルの出力はスキップします。")
-        # with open(file_name, "w+", encoding=encode_kind, newline="") as f:
+        if not os.path.isdir(file_path):
+            os.makedirs(file_path)
+
+        file_name = file_name.replace(".csv", ".txt")
+        with open(file_name, "w+", encoding=encode_kind, newline="") as f:
+            f.write(sample.data_kotei_1)
+            f.write("\n")
+            f.write(sample.data_kotei_2)
+            f.write("\n")
+            f.write(sample.data_kotei_3)
+            f.write("\n")
+            f.write(sample.data_kotei_4)
+            f.write("\n")
+            f.write(sample.data_kotei_5)
+
+
 
 
 def adjust_encode_kind(encode_kind):
@@ -154,6 +168,7 @@ def header_and_data_generate_ver_kotei(sample, in_file, join_info):
                 temp += "*"
 
         word = ""
+
         for _ in range(start_byte, end_byte+1):
             word += str(item_count)
         if date_format != "":
@@ -163,6 +178,8 @@ def header_and_data_generate_ver_kotei(sample, in_file, join_info):
 
         temp += word
         item_count += 1
+        if item_count > 9:
+            item_count = 0
         byte_counter = end_byte
 
     sample.data_kotei_1 = temp
@@ -223,72 +240,36 @@ def header_and_data_generate(sample, sort_list, join_info):
 
 
 def adjust_date_format(sample, date_format):
+    day = ""
     if date_format == "YYYY/MM/DD":
         day = datetime.now().strftime("%Y/%m/%d")
-        sample.data1.append(str(day))
-        sample.data2.append(str(day))
-        sample.data3.append(str(day))
-        sample.data4.append(str(day))
-        sample.data5.append(str(day))
     elif date_format == "YYYYMMDD":
         day = datetime.now().strftime("%Y%m%d")
-        sample.data1.append(str(day))
-        sample.data2.append(str(day))
-        sample.data3.append(str(day))
-        sample.data4.append(str(day))
-        sample.data5.append(str(day))
     elif date_format == "YYYYMM":
         day = datetime.now().strftime("%Y%m")
-        sample.data1.append(str(day))
-        sample.data2.append(str(day))
-        sample.data3.append(str(day))
-        sample.data4.append(str(day))
-        sample.data5.append(str(day))
     elif date_format == "MMDD":
         day = datetime.now().strftime("%m%d")
-        sample.data1.append(str(day))
-        sample.data2.append(str(day))
-        sample.data3.append(str(day))
-        sample.data4.append(str(day))
-        sample.data5.append(str(day))
     elif date_format == "YYYY/MM":
         day = datetime.now().strftime("%Y/%m")
-        sample.data1.append(str(day))
-        sample.data2.append(str(day))
-        sample.data3.append(str(day))
-        sample.data4.append(str(day))
-        sample.data5.append(str(day))
     elif date_format == "MM/DD":
         day = datetime.now().strftime("%m/%d")
-        sample.data1.append(str(day))
-        sample.data2.append(str(day))
-        sample.data3.append(str(day))
-        sample.data4.append(str(day))
-        sample.data5.append(str(day))
     elif date_format == "YYYY":
         day = datetime.now().strftime("%Y")
-        sample.data1.append(str(day))
-        sample.data2.append(str(day))
-        sample.data3.append(str(day))
-        sample.data4.append(str(day))
-        sample.data5.append(str(day))
     elif date_format == "MM":
         day = datetime.now().strftime("%m")
-        sample.data1.append(str(day))
-        sample.data2.append(str(day))
-        sample.data3.append(str(day))
-        sample.data4.append(str(day))
-        sample.data5.append(str(day))
     elif date_format == "DD":
         day = datetime.now().strftime("%d")
-        sample.data1.append(str(day))
-        sample.data2.append(str(day))
-        sample.data3.append(str(day))
-        sample.data4.append(str(day))
-        sample.data5.append(str(day))
+
+    sample.data1.append(str(day))
+    sample.data2.append(str(day))
+    sample.data3.append(str(day))
+    sample.data4.append(str(day))
+    sample.data5.append(str(day))
 
 
 def adjust_date_format_ver_kotei(date_format):
+    day = ""
+
     if date_format == "YYYY/MM/DD":
         day = datetime.now().strftime("%Y/%m/%d")
     elif date_format == "YYYYMMDD":
