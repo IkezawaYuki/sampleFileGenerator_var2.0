@@ -40,7 +40,7 @@ def main():
             execute(f)
     else:
         if "xls" not in file:
-             logger.error(f + " is not Data hub.")
+             logger.error(file + " is not Data hub.")
              tkinter.messagebox.showerror('inspect -sample file generator ver3.0-','変換定義書ではありません。')
              sys.exit(1)
         execute(file)

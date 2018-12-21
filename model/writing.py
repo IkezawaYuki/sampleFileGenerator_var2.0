@@ -88,35 +88,6 @@ def execute_write(basic_info, file_path, sample, delimiter):
             writer.writerow(sample.data4)
             writer.writerow(sample.data5)
 
-        # if delimiter == '':
-        #     with open(file_name, "w+", encoding=encode_kind, newline="") as f:
-        #         writer = csv.writer(f, lineterminator='\n')
-        #         if header_flag == "0" or header_flag == 0 or header_flag == 0.0 or header_flag == "0.0":
-        #             header_list = list(
-        #                 map(lambda header: header + "<削除必須>", sample.header))
-        #             writer.writerow(header_list)
-        #         else:
-        #             writer.writerow(sample.header)
-        #         writer.writerow(sample.data1)
-        #         writer.writerow(sample.data2)
-        #         writer.writerow(sample.data3)
-        #         writer.writerow(sample.data4)
-        #         writer.writerow(sample.data5)
-        # else:
-        #     with open(file_name, "w+", encoding=encode_kind, newline="", errors="replace") as f:
-        #         writer = csv.writer(f, lineterminator='\n', quoting=csv.QUOTE_NONNUMERIC)
-        #
-        #         if header_flag == "0" or header_flag == 0 or header_flag == 0.0 or header_flag == "0.0":
-        #             header_list = list(
-        #                 map(lambda header: header + "<削除必須>", sample.header))
-        #             writer.writerow(header_list)
-        #         else:
-        #             writer.writerow(sample.header)
-        #         writer.writerow(sample.data1)
-        #         writer.writerow(sample.data2)
-        #         writer.writerow(sample.data3)
-        #         writer.writerow(sample.data4)
-        #         writer.writerow(sample.data5)
     else:
         if not os.path.isdir(file_path):
             os.makedirs(file_path)
