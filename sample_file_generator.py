@@ -25,7 +25,6 @@ def main():
     fTyp = [("", "*")]
     iDir = os.path.abspath(os.path.dirname(__file__))
     file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
-    # file = "/Users/ikezaway/Downloads/test_data/IF03100099.xlsx"
 
     if file == "":
         sys.exit(0)
