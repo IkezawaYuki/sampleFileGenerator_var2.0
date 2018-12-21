@@ -11,11 +11,11 @@ def xstr(s):
 
 def create_key(lane, order):
     """
-    レーン、順序から数字のみのキーを作る
+    レーン、順序からキーを作る
     レーン1、順序4の場合、104となる。レーン2、順序10の場合、210ではなく、2010になる点に注意。
     :param lane: 変換詳細の「レーン」の数字
     :param order: 変換詳細の「順序」の数字
-    :return:　数字のみで作ったkey
+    :return: キー
     """
     lane = math.floor(lane)
     order = math.floor(order)
@@ -218,6 +218,6 @@ def execute_coverage_test(sheet):
                 sys.exit(0)
             else:
                 continue
-    l.logger.info("変換定義にロジック起因のエラーはありません。")
+    l.logger.info("There is no error caused by logic in data hub.")
     return True
 

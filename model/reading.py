@@ -2,6 +2,8 @@ import sys
 import tkinter.messagebox
 from operator import itemgetter
 
+import generator_config as l
+
 
 def xstr(s):
     return "" if s is None else str(s)
@@ -24,6 +26,7 @@ def reading_file_koumoku(sheet):
             break
         row_index += 1
         if row_index > 200:
+            l.logger.error("Error because item information could not be found. (in [項目情報])")
             tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                          "一度環境にアップロードしたもののみサンプルデータを作成できます。")
             raise IOError
@@ -174,6 +177,7 @@ def reading_file_kihon(sheet):
             break
         row_index += 1
         if row_index > 100:
+            l.logger.error("Error because it is not Data hub applied to the environment. (in [基本情報])")
             tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                          "一度環境にアップロードしたもののみサンプルデータを作成できます。")
             raise IOError
@@ -189,6 +193,7 @@ def reading_file_kihon(sheet):
 
         if file_name == "":
             if file_name == "" and row_index == 26:
+                l.logger.error("Error because it is not Data hub applied to the environment. (in [基本情報])")
                 tkinter.messagebox.showinfo('inspect -sample file generator ver3.0-',
                                             "一度環境にアップロードしたもののみサンプルデータを作成できます。")
                 sys.exit(0)

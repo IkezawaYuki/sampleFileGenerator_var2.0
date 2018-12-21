@@ -33,13 +33,14 @@ def main():
     if type(file) is tuple:
         for f in file:
             if "xls" not in f:
-                logger.info(f + " is not data hub.")
+                logger.error(f + " is not Data hub.")
                 tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                              '以下のファイルは変換定義書ではありません。\n' + f)
                 sys.exit(1)
             execute(f)
     else:
         if "xls" not in file:
+             logger.error(f + " is not Data hub.")
              tkinter.messagebox.showerror('inspect -sample file generator ver3.0-','変換定義書ではありません。')
              sys.exit(1)
         execute(file)

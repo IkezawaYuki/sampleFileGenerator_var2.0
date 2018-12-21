@@ -10,6 +10,7 @@ import generator_config as l
 class FileInfo:
     """
     サンプルファイルのオブジェクト
+    ヘッダー情報と、サンプルデータを保持する。
     """
     def __init__(self):
         self.header = []
@@ -44,6 +45,7 @@ def generate_file(basic_info_list, sort_list, join_info, file_path):
                 delimiter = None
             execute_write(basic_info_list[i], target_file_path, sample, delimiter)
     except IndexError:
+        l.logger.error("Error because it is not Data hub applied to the environment.")
         tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                      "一度環境に適用された変換定義書でないと、\n正しく情報を読み取れません。\n環境適用後、HUEからダウンロードしたものに使用してください。")
         sys.exit(0)
@@ -68,41 +70,59 @@ def execute_write(basic_info, file_path, sample, delimiter):
         if not os.path.isdir(file_path):
             os.makedirs(file_path)
 
-        if delimiter == '':
-            with open(file_name, "w+", encoding=encode_kind, newline="") as f:
+        with open(file_name, "w+", encoding=encode_kind, newline="", errors="replace") as f:
+            if delimiter == "":
                 writer = csv.writer(f, lineterminator='\n')
-                if header_flag == "0" or header_flag == 0 or header_flag == 0.0 or header_flag == "0.0":
-                    header_list = list(
-                        map(lambda header: header + "<削除必須>", sample.header))
-                    writer.writerow(header_list)
-                else:
-                    writer.writerow(sample.header)
-                writer.writerow(sample.data1)
-                writer.writerow(sample.data2)
-                writer.writerow(sample.data3)
-                writer.writerow(sample.data4)
-                writer.writerow(sample.data5)
-        else:
-            with open(file_name, "w+", encoding=encode_kind, newline="", errors="replace") as f:
+            else:
                 writer = csv.writer(f, lineterminator='\n', quoting=csv.QUOTE_NONNUMERIC)
 
-                if header_flag == "0" or header_flag == 0 or header_flag == 0.0 or header_flag == "0.0":
-                    header_list = list(
-                        map(lambda header: header + "<削除必須>", sample.header))
-                    writer.writerow(header_list)
-                else:
-                    writer.writerow(sample.header)
-                writer.writerow(sample.data1)
-                writer.writerow(sample.data2)
-                writer.writerow(sample.data3)
-                writer.writerow(sample.data4)
-                writer.writerow(sample.data5)
+            if header_flag == "0" or header_flag == 0 or header_flag == 0.0 or header_flag == "0.0":
+                header_list = list(
+                    map(lambda header: header + "<削除必須>", sample.header))
+                writer.writerow(header_list)
+            else:
+                writer.writerow(sample.header)
+            writer.writerow(sample.data1)
+            writer.writerow(sample.data2)
+            writer.writerow(sample.data3)
+            writer.writerow(sample.data4)
+            writer.writerow(sample.data5)
+
+        # if delimiter == '':
+        #     with open(file_name, "w+", encoding=encode_kind, newline="") as f:
+        #         writer = csv.writer(f, lineterminator='\n')
+        #         if header_flag == "0" or header_flag == 0 or header_flag == 0.0 or header_flag == "0.0":
+        #             header_list = list(
+        #                 map(lambda header: header + "<削除必須>", sample.header))
+        #             writer.writerow(header_list)
+        #         else:
+        #             writer.writerow(sample.header)
+        #         writer.writerow(sample.data1)
+        #         writer.writerow(sample.data2)
+        #         writer.writerow(sample.data3)
+        #         writer.writerow(sample.data4)
+        #         writer.writerow(sample.data5)
+        # else:
+        #     with open(file_name, "w+", encoding=encode_kind, newline="", errors="replace") as f:
+        #         writer = csv.writer(f, lineterminator='\n', quoting=csv.QUOTE_NONNUMERIC)
+        #
+        #         if header_flag == "0" or header_flag == 0 or header_flag == 0.0 or header_flag == "0.0":
+        #             header_list = list(
+        #                 map(lambda header: header + "<削除必須>", sample.header))
+        #             writer.writerow(header_list)
+        #         else:
+        #             writer.writerow(sample.header)
+        #         writer.writerow(sample.data1)
+        #         writer.writerow(sample.data2)
+        #         writer.writerow(sample.data3)
+        #         writer.writerow(sample.data4)
+        #         writer.writerow(sample.data5)
     else:
         if not os.path.isdir(file_path):
             os.makedirs(file_path)
 
         file_name = file_name.replace(".csv", ".txt")
-        with open(file_name, "w+", encoding=encode_kind, newline="") as f:
+        with open(file_name, "w+", encoding=encode_kind, newline="",) as f:
             f.write(sample.data_kotei_1)
             f.write("\n")
             f.write(sample.data_kotei_2)
@@ -112,8 +132,7 @@ def execute_write(basic_info, file_path, sample, delimiter):
             f.write(sample.data_kotei_4)
             f.write("\n")
             f.write(sample.data_kotei_5)
-
-
+            f.write("\n")
 
 
 def adjust_encode_kind(encode_kind):
@@ -199,6 +218,7 @@ def header_and_data_generate(sample, sort_list, join_info):
     :param join_info: 結合情報
     :return: 情報を書き込んだ後のファイルオブジェクト
     """
+
     counter = 1
     for row_info in sort_list:
         colum_index = int(row_info[2])
@@ -269,7 +289,6 @@ def adjust_date_format(sample, date_format):
 
 def adjust_date_format_ver_kotei(date_format):
     day = ""
-
     if date_format == "YYYY/MM/DD":
         day = datetime.now().strftime("%Y/%m/%d")
     elif date_format == "YYYYMMDD":
