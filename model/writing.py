@@ -162,7 +162,7 @@ def header_and_data_generate_ver_kotei(sample, in_file, join_info):
         for _ in range(start_byte, end_byte+1):
             word += str(item_count)
         if date_format != "":
-            date_data = adjust_date_format_ver_kotei(date_format)
+            date_data = adjust_date_format(date_format)
             format_char = "{:" + right_or_left + filling_char + str(len(word)) + "}"
             word = format_char.format(date_data)
 
@@ -207,7 +207,12 @@ def header_and_data_generate(sample, sort_list, join_info):
 
         date_format = row_info[4]
         if date_format != "":
-            adjust_date_format(sample, date_format)
+            day_str = adjust_date_format(date_format)
+            sample.data1.append(day_str)
+            sample.data2.append(day_str)
+            sample.data3.append(day_str)
+            sample.data4.append(day_str)
+            sample.data5.append(day_str)
             counter += 1
             continue
 
@@ -230,35 +235,7 @@ def header_and_data_generate(sample, sort_list, join_info):
     return sample
 
 
-def adjust_date_format(sample, date_format):
-    day = ""
-    if date_format == "YYYY/MM/DD":
-        day = datetime.now().strftime("%Y/%m/%d")
-    elif date_format == "YYYYMMDD":
-        day = datetime.now().strftime("%Y%m%d")
-    elif date_format == "YYYYMM":
-        day = datetime.now().strftime("%Y%m")
-    elif date_format == "MMDD":
-        day = datetime.now().strftime("%m%d")
-    elif date_format == "YYYY/MM":
-        day = datetime.now().strftime("%Y/%m")
-    elif date_format == "MM/DD":
-        day = datetime.now().strftime("%m/%d")
-    elif date_format == "YYYY":
-        day = datetime.now().strftime("%Y")
-    elif date_format == "MM":
-        day = datetime.now().strftime("%m")
-    elif date_format == "DD":
-        day = datetime.now().strftime("%d")
-
-    sample.data1.append(str(day))
-    sample.data2.append(str(day))
-    sample.data3.append(str(day))
-    sample.data4.append(str(day))
-    sample.data5.append(str(day))
-
-
-def adjust_date_format_ver_kotei(date_format):
+def adjust_date_format(date_format):
     day = ""
     if date_format == "YYYY/MM/DD":
         day = datetime.now().strftime("%Y/%m/%d")
