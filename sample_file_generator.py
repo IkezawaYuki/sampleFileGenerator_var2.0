@@ -11,12 +11,7 @@ import model.reading as read
 import model.writing as write
 import model.checking as check
 
-h = logging.FileHandler("sample_file_generator.log", encoding="utf-8")
-logger = logging.getLogger(__name__)
-fmt = logging.Formatter("%(asctime)s %(levelname)s %(name)s :%(message)s")
-h.setFormatter(fmt)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(h)
+import generator_config as l
 
 
 def main():
@@ -32,19 +27,19 @@ def main():
     if type(file) is tuple:
         for f in file:
             if "xls" not in f:
-                logger.error(f + " is not Data hub.")
+                l.logger.error(f + " is not Data hub.")
                 tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                              '以下のファイルは変換定義書ではありません。\n' + f)
                 sys.exit(1)
             execute(f)
     else:
         if "xls" not in file:
-             logger.error(file + " is not Data hub.")
+             l.logger.error(file + " is not Data hub.")
              tkinter.messagebox.showerror('inspect -sample file generator ver3.0-','変換定義書ではありません。')
              sys.exit(1)
         execute(file)
 
-    logger.info("Execute is success.")
+    l.logger.info("Execute is success.")
     tkinter.messagebox.showinfo('inspect -sample file generator ver3.0-',
                                 '正常終了しました。\n無限ループ、デッドコード、NullPointerExceptionの可能性はありません。'
                                 '\n\nサンプルファイルを作成しました。')
