@@ -66,7 +66,7 @@ def execute(file):
         if sheet.name == "変換詳細情報":
             check_result = check.execute_coverage_test(sheet)
 
-    if check_result is True:
+    if check_result:
         write.generate_file(basic_info_list, sort_list, join_info, file)
     return True
 

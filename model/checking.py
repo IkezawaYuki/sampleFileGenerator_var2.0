@@ -138,13 +138,13 @@ def inspect_main(key, group, rooting, g_name):
                         continue
                 else:
                     l.logger.info(g_name + " " + str(key) + ". There is a possibility of NullPointerException")
-                    error_row = str(rooting[-1])
+                    error_row = str(key)
                     error_row = error_row.replace("0", " 順序：")
                     tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
                                                  "変換詳細情報に \"通っていない行を参照している箇所\" があります。\n\n変換名称：" + g_name + "\n\n レーン：" + str(error_row))
                     sys.exit(0)
     except KeyError:
-        error_row = str(rooting[-1])
+        error_row = str(key)
         error_row = error_row.replace("0", " 順序：")
         l.logger.info(g_name + " " + str(key) + ". There is a possibility of NullPointerException")
         tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
