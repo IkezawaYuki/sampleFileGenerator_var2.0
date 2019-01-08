@@ -116,6 +116,7 @@ def inspect_main(key, group, rooting, g_name):
     :param rooting: 処理の軌跡
     :return:
     """
+    # todo 深さ優先探索⇒幅優先探索に要変更。コードが汚れてきたので、リファクタリングも。
     roots = rooting.copy()
     roots.append(key)
     try:
@@ -127,8 +128,12 @@ def inspect_main(key, group, rooting, g_name):
                 togo = increment_key(key)
                 if togo in group:
                     inspect_main(togo, group, roots, g_name)
+                # todo ここにelifで「>>」があったかどうかを確認する必要がある。
+                # あった場合はその処理に。なかった場合はbreakするスクリプトが必要。
+
                 break
             elif ">>" in cell:
+                # todo おそらくflagが必要。もしくは変数として再帰呼び出しの際に、参照できるようにしなければならない。
                 togo = adjust_togo(cell)
                 inspect_main(togo, group, roots, g_name)
             elif ">" in cell:
