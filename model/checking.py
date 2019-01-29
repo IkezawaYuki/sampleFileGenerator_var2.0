@@ -1,12 +1,133 @@
 import tkinter.messagebox
 import math
 import sys
+import pprint
 
 import generator_config as l
 
 
 def xstr(s):
     return "" if s is None else str(s)
+
+
+class ConversionDetailedGroup:
+    def __init__(self, conversion_row, name):
+        self.conversion_rows = dict(conversion_row)
+        self.check_result = False
+        self.error_msg = []
+        self.name = name
+        self.lane = []
+        self.statement = True
+
+        before = 100
+        temp_row = []
+        for key in self.conversion_rows.keys():
+            temp1 = str(before)[:2]
+            temp2 = str(key)[:2]
+            before = key
+            if temp1 == temp2:
+                temp_row.append(key)
+            else:
+                self.lane.append(temp_row[:])
+                temp_row.clear()
+                temp_row.append(key)
+        self.lane.append(temp_row)
+
+    def through_all_check(self):
+        if len(self.error_msg) > 0:
+            print("There are error!!")
+            print(self.error_msg)
+
+        for key, rows in self.conversion_rows.items():
+            if rows[-1] is False:
+                print(key)
+                self.error_msg.append("通っていない行があります。\n"
+                                      "変換名称 : {}\nレーン {} 順序 {}".format(self.name, str(key)[0], str(key)[2]))
+
+    def show_error_msg(self):
+        if len(self.error_msg) == 0:
+            return
+        for msg in self.error_msg:
+            yes = tkinter.messagebox.askyesno('inspect -sample file generator ver3.0-', msg + "\n\n処理を中断しますか？")
+            if yes:
+                sys.exit(0)
+
+    def __bool__(self):
+        return self.statement
+
+
+class Inspect:
+    def __init__(self):
+        self.key = 101
+        self.jump_stack = []
+        self.rooting = []
+
+    def cell_scan(self, cell):
+        if ">>" in cell:
+            jump = adjust_togo(cell)
+            self.jump_stack.append(jump)
+        elif ">" in cell:
+            root = adjust_togo(cell)
+            if root not in self.rooting:
+                return False
+            #todo 無限ループの可能性を検出するロジックの追加。
+
+        return True
+
+    def row_scan(self, c_group, c_row, key):
+        for num, cell in enumerate(c_row):
+            if num == 10:
+                c_row[10] = True
+                continue
+            result = self.cell_scan(cell)
+            if result is False:
+                c_group.statement = False
+                c_group.error_msg.append("NullPointerExceptionが発生しています。\n"
+                                         "変換名称 : {}\nレーン {} 順序 {}".format(c_group.name, str(key)[0], str(key)[2]))
+        self.rooting.append(key)
+
+    def lane_scan(self, c_group, lane):
+        i = 1
+        for key in lane:
+            if str(i) != str(key)[-1]:
+                c_group.error_msg.append("処理を飛ばす先が存在しません。\n"
+                                         "変換名称 : {}\nレーン {} 順序 {}".format(c_group.name, str(key)[0], str(key)[2]))
+            target_rows = c_group.conversion_rows[key]
+            self.row_scan(c_group, target_rows, key)
+            i += 1
+
+    def inspect_main(self, group):
+        temp = group.lane.pop(0)
+        self.lane_scan(group, temp)
+        while len(self.jump_stack) > 0:
+            jump_key = self.jump_stack.pop(0)
+            i = 0
+            for lists in group.lane:
+                if jump_key in lists:
+                    self.lane_scan(group, lists)
+                    group.lane.pop(i)
+                    break
+                i += 1
+            else:
+                group.error_msg.append("処理を飛ばす先が存在しません。\n"
+                                       "変換名称 : {}\n飛ばす先のレーン : {}".format(group.name, str(jump_key)[0]))
+
+    def adjust_togo(cell):
+        if ">>" in cell:
+            n = cell.rfind(">")
+            togo = cell[n + 1:]
+            togo = int(togo + "01")
+            return togo
+        elif ">" in cell:
+            n = cell.rfind(">")
+            togo = cell[n + 1:]
+            togo = int(togo.replace("-", "0"))
+            return togo
+
+    def __str__(self):
+        return str(self.group_name)
+
+
 
 
 def create_key(lane, order):
@@ -102,75 +223,11 @@ def reference_row(key, group, g_name):
             return False
         if ">>" in cell:
             l.logger.info(g_name + " " + str(key) + " is dangerous logic.")
-            tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
-                                         "以下の行を参照しようとする際、問題が起きる可能性があります。\nロジックを修正してください。\n\n変換名称：" + g_name + "\n\n" + str(temp))
-            sys.exit(0)
+            yes = tkinter.messagebox.askyesno('inspect -sample file generator ver3.0-',
+                                         "以下の行を参照しようとする際、問題が起きる可能性があります。\n処理を中断しますか？\n\n変換名称：" + g_name + "\n\n" + str(temp))
+            if yes:
+                sys.exit(0)
 
-
-def inspect_main(key, group, rooting, g_name):
-    """
-    変換詳細情報のチェックのメインルーチン。各行に対して、通った行にはTrue、通らなかった行はFalseとなる。
-    ロジックは「深さ優先探索」を採用。
-    :param key: レーン、順序から作ったキー
-    :param group: 変換詳細の情報を、変換名称ごとに分けたもの。
-    :param rooting: 処理の軌跡
-    :return:
-    """
-    # todo 深さ優先探索⇒幅優先探索に要変更。コードが汚れてきたので、リファクタリングも。
-    roots = rooting.copy()
-    roots.append(key)
-    try:
-        temp = group[key]
-        for num, cell in enumerate(temp):
-            if num == 10:
-                if temp[10] is False:
-                    temp[10] = True
-                togo = increment_key(key)
-                if togo in group:
-                    inspect_main(togo, group, roots, g_name)
-                # todo ここにelifで「>>」があったかどうかを確認する必要がある。
-                # あった場合はその処理に。なかった場合はbreakするスクリプトが必要。
-
-                break
-            elif ">>" in cell:
-                # todo おそらくflagが必要。もしくは変数として再帰呼び出しの際に、参照できるようにしなければならない。
-                togo = adjust_togo(cell)
-                inspect_main(togo, group, roots, g_name)
-            elif ">" in cell:
-                togo = adjust_togo(cell)
-                if togo in roots:
-                    if reference_row(togo, group, g_name):
-                        continue
-                else:
-                    l.logger.info(g_name + " " + str(key) + ". There is a possibility of NullPointerException")
-                    error_row = str(key)
-                    error_row = error_row.replace("0", " 順序：")
-                    tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
-                                                 "変換詳細情報に \"通っていない行を参照している箇所\" があります。\n\n変換名称：" + g_name + "\n\n レーン：" + str(error_row))
-                    sys.exit(0)
-    except KeyError:
-        error_row = str(key)
-        error_row = error_row.replace("0", " 順序：")
-        l.logger.info(g_name + " " + str(key) + ". There is a possibility of NullPointerException")
-        tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
-                                     "変換詳細情報に \"存在しない箇所を参照している行\" があります。\n\n変換名称：" + g_name+ "\n\n レーン：" + str(error_row))
-        sys.exit(0)
-    except RecursionError:
-        l.logger.info(g_name + " " + str(key) + ". There is a infinite loop")
-        tkinter.messagebox.showerror('inspect -sample file generator ver3.0-',
-                                     "変換詳細情報に \"無限ループ\" が存在しています。\n\n変換名称：" + g_name)
-        sys.exit(0)
-
-
-def increment_key(key):
-    temp_base = str(key)
-    temp = temp_base[-2:]
-    if temp == "09":
-        key = temp_base[:-1] + "10"
-        l.logger.info(key)
-        return int(key)
-    else:
-        return key + 1
 
 
 def adjust_togo(cell):
@@ -211,20 +268,13 @@ def execute_coverage_test(sheet):
 
     for num, group in enumerate(converte_rows):
         g_name = group_name[num]
-        rooting = []
-        inspect_main(101, group, rooting, g_name)
+        pprint.pprint(group)
+        c_row = ConversionDetailedGroup(group, g_name)
+        inspect = Inspect()
+        inspect.inspect_main(c_row)
+        c_row.through_all_check()
+        c_row.show_error_msg()
 
-    for num, group in enumerate(converte_rows):
-        results = group.values()
-        for result in results:
-            if result[10] is False:
-                tkinter.messagebox.showerror(
-                    'inspect -sample file generator ver3.0-',
-                    "変換詳細情報に \"通っていない行\" が存在しています。\n以下の変換詳細情報を見直してください。\n\n変換名称：" + group_name[num] + "\n\n" + str(result))
-
-                sys.exit(0)
-            else:
-                continue
     l.logger.info("There is no error caused by logic in data hub.")
     return True
 

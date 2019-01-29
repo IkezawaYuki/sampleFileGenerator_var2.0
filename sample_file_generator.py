@@ -18,7 +18,8 @@ def main():
     root = tkinter.Tk()
     root.withdraw()
     fTyp = [("", "*")]
-    iDir = os.path.abspath(os.path.dirname(__file__))
+    iDir = os.path.dirname(os.path.abspath("__file__"))
+    # iDir = os.path.abspath(os.path.dirname(__file__))
     file = tkinter.filedialog.askopenfilenames(filetypes=fTyp, initialdir=iDir)
 
     if file == "":
@@ -39,10 +40,9 @@ def main():
              sys.exit(1)
         execute(file)
 
-    l.logger.info("Execute is success.")
+
     tkinter.messagebox.showinfo('inspect -sample file generator ver3.0-',
-                                '正常終了しました。\n無限ループ、デッドコード、NullPointerExceptionの可能性はありません。'
-                                '\n\nサンプルファイルを作成しました。')
+                                'サンプルファイルの作成が正常終了しました。')
     sys.exit(0)
 
 
