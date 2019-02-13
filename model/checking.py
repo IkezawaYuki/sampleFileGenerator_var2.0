@@ -80,9 +80,9 @@ class Inspect:
 
     def row_scan(self, c_group, c_row, key):
         for num, cell in enumerate(c_row):
-            if num == 10:
-                c_row[10] = True
+            if isinstance(cell, bool):
                 continue
+
             result = self.cell_scan(cell, c_group)
             if result == 101:
                 c_group.statement = False
@@ -92,6 +92,7 @@ class Inspect:
                 c_group.statement = False
                 c_group.error_msg.append("無限ループが発生する可能性があります。\n"
                                          "変換名称 : {}\nレーン {} 順序 {}".format(c_group, str(key)[0], str(key)[2]))
+        c_row[10] = True
         self.rooting.append(key)
 
     def lane_scan(self, c_group, lane):
@@ -118,7 +119,6 @@ class Inspect:
                                        "変換名称 : {}\n飛ばす先のレーン : {}".format(group, str(jump_key)[0]))
 
     def adjust_togo(self, cell):
-        print(cell)
         if ">>" in cell:
             n = cell.rfind(">")
             togo = cell[n + 1:]
@@ -221,43 +221,6 @@ def read_convert_info(sheet):
     return converte_rows, group_name
 
 
-# def reference_row(key, group, g_name):
-#     """
-#     このメソッドで、参照先の行に問題がないかどうかをチェックする。
-#     変換定義の仕様上、ある行が>2-3としていて、そのレーン2、順序3の行に>>4、などとある場合、正しく動作しない。
-#     >?-? の先に　>>?　が存在しないかどうかをチェックする必要がある。
-#     """
-#     temp = group[key]
-#     for num, cell in enumerate(temp):
-#         if num == 10:
-#             return False
-#         if ">>" in cell:
-#             l.logger.info(g_name + " " + str(key) + " is dangerous logic.")
-#             yes = tkinter.messagebox.askyesno('inspect -sample file generator ver3.0-',
-#                                          "以下の行を参照しようとする際、問題が起きる可能性があります。\n処理を中断しますか？\n\n変換名称：" + group + "\n\n" + str(temp))
-#             if yes:
-#                 sys.exit(0)
-#
-# #
-# def adjust_togo(cell):
-#     """
-#     >1-1 や >>2などの値をkeyの形（101などの３桁）に修正するメソッド
-#     注意が必要なのは109の次は110ではなく1010になる点
-#     :param cell: 「>」「>>」が存在するセル　例）>3-1
-#     :return: ３桁の数、key
-#     """
-#     if ">>" in cell:
-#         n = cell.rfind(">")
-#         togo = cell[n + 1:]
-#         togo = int(togo + "01")
-#         return togo
-#     elif ">" in cell:
-#         n = cell.rfind(">")
-#         togo = cell[n + 1:]
-#         togo = int(togo.replace("-", "0"))
-#         return togo
-
-
 def execute_coverage_test(sheet):
     """
     変換定義の詳細情報がすべて通る可能性があるかどうかのチェックを行うメソッド
@@ -284,6 +247,6 @@ def execute_coverage_test(sheet):
         c_row.through_all_check()
         c_row.show_error_msg()
 
-    l.logger.info("There is no error caused by logic in data hub.")
+    l.logger.info("Check is end.")
     return True
 
